@@ -1,5 +1,6 @@
 import pygame
 import materials
+import random
 
 # Initialize Pygame
 pygame.init()
@@ -15,8 +16,12 @@ pygame.display.set_caption("My Pygame Screen")
 
 DOT_COLOR = (125, 125, 125)
 LINE_COLOR = (120, 255, 255)
-materials = materials.Stone(200, 200, 12, 9, 25, 58)
+bone = materials.Bone(200, 200, 12, 9, 25, 49)
+bone.print_dots()
 
+for _ in range(30):
+    bone.remove_dot(random.randint(0, len(bone.get_dots())))
+    
 # Game loop
 running = True
 while running:
@@ -27,11 +32,11 @@ while running:
             running = False
         
         
-    for location in materials.get_dots():
+    for location in bone.get_dots():
         pygame.draw.circle(screen, DOT_COLOR, [location[0], location[1]], 5)
 
 
-    for line in materials.get_lines():
+    for line in bone.get_lines():
         pygame.draw.line(screen, LINE_COLOR, line[0], line[1])
 
     # Update screen

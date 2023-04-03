@@ -1,5 +1,6 @@
 import pygame
-import materials
+import bone
+import skin_bone
 import random
 
 # Initialize Pygame
@@ -14,13 +15,11 @@ screen = pygame.display.set_mode(screen_size)
 # Set window title
 pygame.display.set_caption("My Pygame Screen")
 
-DOT_COLOR = (125, 125, 125)
-LINE_COLOR = (120, 255, 255)
-bone = materials.Bone(200, 200, 12, 9, 25, 49)
-bone.print_dots()
+DEBUGGING_COLOR = (255, 0, 0)
+STONE_COLOR = (125, 125, 125)
 
-for _ in range(30):
-    bone.remove_dot(random.randint(0, len(bone.get_dots())))
+# Make a skin bone
+skin_bone_1 = skin_bone.SkinBone([(120, 120), (120, 150), (140, 170), (180, 190), (220, 190), (240, 170), (250, 140), (250, 100), (230, 80), (200, 80), (170, 100), (140, 100)])
     
 # Game loop
 running = True
@@ -31,13 +30,11 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         
+    pygame.draw.polygon(screen, STONE_COLOR, skin_bone_1.get_nodes(), 0)
+    
+    for node in skin_bone_1.get_nodes():
+        pygame.draw.circle(screen, DEBUGGING_COLOR, node, 3)
         
-    for location in bone.get_dots():
-        pygame.draw.circle(screen, DOT_COLOR, [location[0], location[1]], 5)
-
-
-    for line in bone.get_lines():
-        pygame.draw.line(screen, LINE_COLOR, line[0], line[1])
 
     # Update screen
     pygame.display.flip()

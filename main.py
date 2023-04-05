@@ -1,5 +1,5 @@
 import pygame
-import skin_bone
+import skin_bone    
 
 # Initialize Pygame
 pygame.init()

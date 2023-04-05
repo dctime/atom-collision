@@ -1,7 +1,5 @@
 import pygame
-import bone
 import skin_bone
-import random
 
 # Initialize Pygame
 pygame.init()
@@ -20,9 +18,6 @@ STONE_COLOR = (125, 125, 125)
 
 # Make a skin bone
 skin_bone_1 = skin_bone.SkinBone()
-# nodes = [(120, 120), (120, 150), (140, 170), (180, 190), (220, 190), (240, 170), (250, 140), (250, 100), (230, 80), (200, 80), (170, 100)]
-# skin_bone_1.set_nodes(nodes)
-# Game loop
 running = True
 physics_mode = False
 
@@ -51,8 +46,7 @@ while running:
             if event.type == pygame.QUIT:
                 running = False
             
-        skin_bone_1.physic_update()
-            
+        skin_bone_1.move((3, -2))
         
     # Draw shapes on the screen
     if len(skin_bone_1.get_nodes()) == 1:

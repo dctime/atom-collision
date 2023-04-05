@@ -17,7 +17,7 @@ DEBUGGING_COLOR = (255, 0, 0)
 STONE_COLOR = (125, 125, 125)
 
 # Make a skin bone
-skin_bone_1 = skin_bone.SkinBone()
+skin_bone_1 = skin_bone.SkinBone(10)
 running = True
 physics_mode = False
 
@@ -37,6 +37,8 @@ while running:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_s:
                     physics_mode = True
+                if event.key == pygame.K_t:
+                    skin_bone_1.fill_nodes()
                     
             if event.type == pygame.QUIT:
                 running = False

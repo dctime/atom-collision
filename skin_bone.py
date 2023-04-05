@@ -1,7 +1,8 @@
 class SkinBone:
-    def __init__(self):
+    def __init__(self, nodes_max_length):
         self.nodes = []
         self.lines = []
+        self.nodes_max_length = nodes_max_length
     
     def set_nodes(self, nodes:list):
         self.nodes = nodes
@@ -52,6 +53,32 @@ class SkinBone:
                     break
                 
         return is_crossover
+    
+    def fill_nodes(self):
+        changed = False
+        nodes = self.nodes
+        for index in range(len(nodes)-1, -1, -1):
+            node1 = ()
+            node2 = ()
+            if index + 1 >= len(nodes):
+                node1 = (nodes[index])
+                node2 = (nodes[0])
+            else:
+                node1 = (nodes[index])
+                node2 = (nodes[index+1])
+                
+            distance = lambda vector1, vector2: ((vector2[0] - vector1[0])**2 + (vector2[1] - vector1[1])**2)**(1/2)
+            middle = lambda vector1, vector2: ((vector1[0] + vector2[0])/2, (vector1[1]+vector2[1])/2)
+            if distance(node1, node2) > self.nodes_max_length:
+                self.nodes.insert(index+1, middle(node1, node2))
+                print(f"NODES:{self.nodes}")
+                changed = True
+                break
+            
+        if changed:
+            self.fill_nodes()
+                
+            
             
     def _detect_crossover(self, line1:tuple, line2:tuple):
         # ax + by = c

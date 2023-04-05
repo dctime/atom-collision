@@ -19,8 +19,9 @@ DEBUGGING_COLOR = (255, 0, 0)
 STONE_COLOR = (125, 125, 125)
 
 # Make a skin bone
-skin_bone_1 = skin_bone.SkinBone([(120, 120), (120, 150), (140, 170), (180, 190), (220, 190), (240, 170), (250, 140), (250, 100), (230, 80), (200, 80), (170, 100), (140, 100)])
-    
+skin_bone_1 = skin_bone.SkinBone()
+nodes = [(120, 120), (120, 150), (140, 170), (180, 190), (220, 190), (240, 170), (250, 140), (250, 100), (230, 80), (200, 80), (170, 100), (140, 100)]
+skin_bone_1.set_nodes(nodes)
 # Game loop
 running = True
 while running:

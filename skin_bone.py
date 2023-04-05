@@ -1,9 +1,12 @@
 class SkinBone:
-    def __init__(self, nodes:list):
-        self.nodes = nodes
+    def __init__(self):
+        self.nodes = []
         self.lines = []
         self._gen_lines()
     
+    def set_nodes(self, nodes:list):
+        self.nodes = nodes
+        
     def get_nodes(self):
         return self.nodes
     

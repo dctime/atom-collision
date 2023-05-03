@@ -1,5 +1,15 @@
 class SkinBone:
     def __init__(self, nodes_max_length):
+        '''
+        nodes_max_length: the distance between the two points when calls the fill_nodes method
+        think it as how much the bone can resist the punch
+        high value -> metal, low value -> clay
+
+        self.nodes
+        example: [(1, 2), (1, 3), (2, 3)]
+        self.lines
+        example: [((1, 2), (1, 3)), ((1, 3), (2, 3)), ((2, 3), (1, 2))]
+        '''
         self.nodes = []
         self.lines = []
         self.nodes_max_length = nodes_max_length
@@ -31,7 +41,7 @@ class SkinBone:
                     # print(f"ADD lines, now lines:{self.lines}")
         # print(f"LINES:{self.lines}")
     
-    def is_crossover(self):
+    def is_crossover(self) -> bool:
         is_crossover = False
         
         if len(self.lines) > 3:
@@ -50,7 +60,7 @@ class SkinBone:
                 
         return is_crossover
     
-    def fill_nodes(self):
+    def fill_nodes(self) -> None:
         changed = False
         nodes = self.nodes
         for index in range(len(nodes)-1, -1, -1):
@@ -73,10 +83,8 @@ class SkinBone:
             
         if changed:
             self.fill_nodes()
-                
-            
-            
-    def _detect_crossover(self, line1:tuple, line2:tuple):
+                  
+    def _detect_crossover(self, line1:tuple, line2:tuple) -> bool:
         # ax + by = c
         # y - y0 = m(x - x0)
         # (y-y0) = mx - mx0

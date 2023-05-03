@@ -1,5 +1,5 @@
 import pygame
-import skin_bone    
+import rigid_body
 
 # Initialize Pygame
 pygame.init()
@@ -17,7 +17,7 @@ DEBUGGING_COLOR = (255, 0, 0)
 STONE_COLOR = (125, 125, 125)
 
 # Make a skin bone
-skin_bone_1 = skin_bone.SkinBone(10)
+skin_bone_1 = rigid_body.Rigidbody(10)
 running = True
 physics_mode = False
 

@@ -31,10 +31,6 @@ class SkinBone:
                     # print(f"ADD lines, now lines:{self.lines}")
         # print(f"LINES:{self.lines}")
     
-    def move(self, velocity_vector:tuple):
-        for index in range(len(self.nodes)):
-            self.nodes[index] = (self.nodes[index][0]+velocity_vector[0], self.nodes[index][1]+velocity_vector[1])
-    
     def is_crossover(self):
         is_crossover = False
         

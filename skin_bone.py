@@ -1,3 +1,5 @@
+import pygame
+
 class SkinBone:
     def __init__(self, nodes_max_length=10):
         '''
@@ -13,10 +15,24 @@ class SkinBone:
         self.nodes = []
         self.lines = []
         self.nodes_max_length = nodes_max_length
+
+    def render(self, screen, color, debug_color=(255, 0, 0)):
+        if len(self.get_nodes()) == 1:
+            pygame.draw.circle(screen, debug_color, self.get_nodes()[0], 3)
+        elif len(self.get_nodes()) == 2:
+            pygame.draw.line(screen, color, self.get_nodes()[0], self.get_nodes()[1])
+            pygame.draw.circle(screen, debug_color, self.get_nodes()[0], 3)
+            pygame.draw.circle(screen, debug_color, self.get_nodes()[1], 3)
+        elif len(self.get_nodes()) > 2:
+            pygame.draw.polygon(screen, color, self.get_nodes(), 0)
     
     def set_nodes(self, nodes:list):
+        '''
+        example: [(1, 2), (1, 3), (2, 3)]
+        '''
         self.nodes = nodes
         self._gen_lines()
+        self.fill_nodes()
         
     def add_node(self, node:tuple):
         self.nodes.append(node)

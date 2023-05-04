@@ -1,5 +1,5 @@
 import pygame
-import rigid_body
+import skin_bone
 import math
 
 # Initialize Pygame
@@ -19,7 +19,7 @@ STONE_COLOR = (125, 125, 125)
 CENTER_OF_MASS_COLOR = (255,77,255)
 
 # Make a skin bone
-rigidbody1 = rigid_body.Rigidbody(10)
+rigidbody1 = skin_bone.SkinBone(10)
 running = True
 physics_mode = False
 
@@ -30,30 +30,19 @@ while running:
     screen.fill((0, 0, 0))
     
     # Handle events
-    if not physics_mode:
-        for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                x, y = pygame.mouse.get_pos()
-                rigidbody1.add_node((x, y))
+    for event in pygame.event.get():
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            x, y = pygame.mouse.get_pos()
+            rigidbody1.add_node((x, y))
+            
+        # polygon ready
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_t:
+                rigidbody1.fill_nodes()
                 
-            # polygon ready
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_s:
-                    physics_mode = True
-                if event.key == pygame.K_t:
-                    rigidbody1.fill_nodes()
-                    
-            if event.type == pygame.QUIT:
-                running = False
+        if event.type == pygame.QUIT:
+            running = False
             
-    else:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            
-        rigidbody1.rotate(math.pi / 100)
-        rigidbody1.move((1, 0))
-        
     # Draw shapes on the screen
     # Draw polygon
     if len(rigidbody1.get_nodes()) == 1:
@@ -69,9 +58,6 @@ while running:
     for node in rigidbody1.get_nodes():
         pygame.draw.circle(screen, DEBUGGING_COLOR, node, 3)
 
-    # Draw center of mass
-    if len(rigidbody1.get_nodes()) > 1:
-        pygame.draw.circle(screen, CENTER_OF_MASS_COLOR, rigidbody1.get_center_of_mass(), 3)
 
     
         

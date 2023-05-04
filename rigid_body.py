@@ -1,6 +1,7 @@
 import skin_bone
 import numpy as np
 import math
+
 # Deprecated
 class Rigidbody(skin_bone.SkinBone):
     def __init__(self, nodes_max_length):

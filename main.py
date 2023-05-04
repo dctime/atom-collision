@@ -19,7 +19,7 @@ STONE_COLOR = (125, 125, 125)
 CENTER_OF_MASS_COLOR = (255,77,255)
 
 # Make a skin bone
-rigidbody1 = skin_bone.SkinBone(10)
+rigidbody1 = skin_bone.SkinBone()
 running = True
 physics_mode = False
 

@@ -1,9 +1,9 @@
 class SkinBone:
-    def __init__(self, nodes_max_length):
+    def __init__(self, nodes_max_length=10):
         '''
         nodes_max_length: the distance between the two points when calls the fill_nodes method
-        think it as how much the bone can resist the punch
-        high value -> metal, low value -> clay
+        the higher the value the smoother the crack is
+        high value -> clay, low value -> wood
 
         self.nodes
         example: [(1, 2), (1, 3), (2, 3)]
@@ -77,7 +77,7 @@ class SkinBone:
             middle = lambda vector1, vector2: ((vector1[0] + vector2[0])/2, (vector1[1]+vector2[1])/2)
             if distance(node1, node2) > self.nodes_max_length:
                 self.nodes.insert(index+1, middle(node1, node2))
-                print(f"NODES:{self.nodes}")
+                # print(f"NODES:{self.nodes}")
                 changed = True
                 break
             

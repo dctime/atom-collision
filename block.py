@@ -31,7 +31,7 @@ class Block(skin_bone.SkinBone):
         self._hp += value
     
 
-    def render(self, screen, color, is_debugging:bool, debug_color=(255, 0, 0)):
+    def render(self, screen, color, is_debugging=False, debug_color=(255, 0, 0)):
         # draw ifself
         if self._visible:
             pygame.draw.polygon(screen, color, self.get_nodes(), 0)

@@ -37,7 +37,7 @@ while running:
             running = False
             
     # Draw shapes on the screen
-        
+    block_assembly.render(screen)
 
     # Update screen
     pygame.display.flip()

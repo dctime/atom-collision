@@ -26,13 +26,14 @@ class SkinBone:
         elif len(self.get_nodes()) > 2:
             pygame.draw.polygon(screen, color, self.get_nodes(), 0)
     
-    def set_nodes(self, nodes:list):
+    def set_nodes(self, nodes:list, fill_nodes=False):
         '''
         example: [(1, 2), (1, 3), (2, 3)]
         '''
         self.nodes = nodes
         self._gen_lines()
-        self.fill_nodes()
+        if fill_nodes:
+            self.fill_nodes()
         
     def add_node(self, node:tuple):
         self.nodes.append(node)

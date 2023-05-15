@@ -30,7 +30,7 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             x, y = pygame.mouse.get_pos()
-            blocks.add(block.Block((x, y)))
+            blocks.add(block.Block((x, y), 100))
                 
         if event.type == pygame.QUIT:
             running = False
@@ -39,7 +39,7 @@ while running:
     # Draw block
     for a_block in blocks:
         if isinstance(a_block, block.Block):
-            a_block.render(screen, STONE_COLOR, False)
+            a_block.render(screen, STONE_COLOR, True)
         
 
     # Update screen

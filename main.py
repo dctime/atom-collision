@@ -16,7 +16,7 @@ screen = pygame.display.set_mode(screen_size)
 pygame.display.set_caption("My Pygame Screen")
 
 DEBUGGING_COLOR = (255, 0, 0)
-STONE_COLOR = (125, 125, 125)
+
 CENTER_OF_MASS_COLOR = (255,77,255)
 
 running = True

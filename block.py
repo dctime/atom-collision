@@ -1,19 +1,22 @@
 import skin_bone
 import pygame
 
+STONE_COLOR = (125, 125, 125)
+
 class Block(skin_bone.SkinBone):
-    def __init__(self, center_point:tuple, hp:int, visible=True):
+    def __init__(self, center_point:tuple, hp:int, color:tuple, visible=True):
         super().__init__()
         self._hp = hp
         self._visible = visible
-        block_size = 30
-        points = []
-        points.append((center_point[0]-block_size/2, center_point[1]-block_size/2))
-        points.append((center_point[0]+block_size/2, center_point[1]-block_size/2))
-        points.append((center_point[0]+block_size/2, center_point[1]+block_size/2))
-        points.append((center_point[0]-block_size/2, center_point[1]+block_size/2))
+        self._block_size = 30
+        self._color = color
+        self._points = []
+        self._points.append((center_point[0]-self._block_size/2, center_point[1]-self._block_size/2))
+        self._points.append((center_point[0]+self._block_size/2, center_point[1]-self._block_size/2))
+        self._points.append((center_point[0]+self._block_size/2, center_point[1]+self._block_size/2))
+        self._points.append((center_point[0]-self._block_size/2, center_point[1]+self._block_size/2))
 
-        self.set_nodes(points)
+        self.set_nodes(self._points)
         
     def get_hp(self):
         return self._hp
@@ -31,10 +34,10 @@ class Block(skin_bone.SkinBone):
         self._hp += value
     
 
-    def render(self, screen, color, is_debugging=False, debug_color=(255, 0, 0)):
+    def render(self, screen, is_debugging=False, debug_color=(255, 0, 0)):
         # draw ifself
         if self._visible:
-            pygame.draw.polygon(screen, color, self.get_nodes(), 0)
+            pygame.draw.polygon(screen, self._color, self.get_nodes(), 0)
 
             # Draw corners
             if is_debugging:

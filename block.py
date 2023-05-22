@@ -4,13 +4,14 @@ import pygame
 STONE_COLOR = (125, 125, 125)
 
 class Block(skin_bone.SkinBone):
-    def __init__(self, center_point:tuple, hp:int, color:tuple, visible=True):
+    def __init__(self, center_point:tuple, hp:int, color:tuple, mass:int, visible=True):
         super().__init__()
         self._hp = hp
         self._visible = visible
         self._block_size = 30
         self._color = color
         self._points = []
+        self._mass = mass
         self._points.append((center_point[0]-self._block_size/2, center_point[1]-self._block_size/2))
         self._points.append((center_point[0]+self._block_size/2, center_point[1]-self._block_size/2))
         self._points.append((center_point[0]+self._block_size/2, center_point[1]+self._block_size/2))

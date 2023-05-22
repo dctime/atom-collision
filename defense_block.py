@@ -1,15 +1,12 @@
-import block
-
-
-class WoodBlock(Block):
-    def __init__(self, center_point: tuple, hp: int, visible=True, status=3):
+class DefenseBlock:
+    def __init__(self, center_point: tuple, hp: int, mass:int, visible=True, status=3):
         self._status = None
-        self._init_color = (133, 94, 66)
-
+        self._init_color = (136, 140, 141)
+        
         self.set_status(status)
         self.set_color()
 
-        super.__init__(center_point, hp, self._color)
+        super.__init__(center_point, hp, self._color, mass)
 
     def set_status(self, status: int):
         # status: 0(hp=0),1(hp<25%),2(hp<50%),3(hp<75%),4(hp>75%)

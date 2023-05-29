@@ -1,23 +1,25 @@
 from block import Block
 from color import Color
 
+
 class BlockAssembly(Block):
     def __init__(self):
         self._core = Block((200, 200), 100, Color.CORE_COLOR)
         self._core_x = 0
         self._core_y = 0
         self.rotation = 0
-        self._blocks = {(0, 0):self._core}
+        self._blocks = {(0, 0): self._core}
 
     def render(self, screen):
         for coordinate, block in self._blocks.items():
             block.render(screen)
 
-    def add_block(self, block:Block, location:tuple):
+    def add_block(self, block: Block, location: tuple):
         self._blocks[location] = block
 
+
 class Builder:
-    def __init__(self, core_block, core_coor):
+    def __init__(self, core_block: Block, core_coor: tuple):
         self._size = 0
 
         # key=coor, value=block
@@ -31,10 +33,10 @@ class Builder:
     def size(self):
         return self._size
 
-    def get_block(self, coor):
+    def get_block(self, coor: tuple):
         return self._coor_block.get(coor)
 
-    def get_able(self, coor):
+    def get_able(self, coor: tuple):
         # check if coor is able to add_block
         if self.get_block(coor) != None:
             return False
@@ -44,7 +46,7 @@ class Builder:
                 return True
         return False
 
-    def get_neighbors(self, coor):
+    def get_neighbors(self, coor: tuple):
         # return neighbors at coor(including None)
         x = coor[0]
         y = coor[1]
@@ -54,7 +56,7 @@ class Builder:
                      self.get_block((x, y+1)), self.get_block((x, y-1))]
         return neighbors
 
-    def add_block(self, block, coor, core=False):
+    def add_block(self, block: Block, coor: tuple, core: bool = False):
         if not core and not self.get_able(coor):
             raise print('Adding block in this coor is unavailable.')
             return
@@ -68,8 +70,8 @@ class Builder:
                 self._block_child[neighbor].append(block)
         return self
 
-    def add_blocks(coordinate_block:dict):
+    def add_blocks(coordinate_block: dict):
         pass
-        
+
     def build() -> Block:
-        pass 
+        pass

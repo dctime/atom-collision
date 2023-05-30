@@ -17,6 +17,9 @@ class BlockAssembly(Block):
     def add_block(self, block: Block, location: tuple):
         self._blocks[location] = block
 
+    def get_blocks(self) -> dict:
+        return self._blocks
+
 
 class Builder:
     def __init__(self, core_block: Block, core_coor: tuple):

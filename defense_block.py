@@ -1,12 +1,27 @@
 from block import Block
+import weapons as wp
+import game_statistics as stat
 
 
 class DefenseBlock(Block):
-    def __init__(self, center_point: tuple, color: tuple, hp: int, mass: int, arm_type: str = None, visible: bool = True, status: int = 3):
+    """
+    Attribute:
+        (1) _status: status of block, decided by hp ratio
+        (2) _max_hp: block's max_hp
+        (3) _init_color: initial color
+        (4) _texture: texture of block
+        (5) _arm: weapon of block
+        (6) _rotation: angle of block with x-axis(in degree)
+        and others in Block
+    """
+
+    def __init__(self, center_point: tuple, color: tuple, hp: int, mass: int, texture: str, arm=None, visible: bool = True, status: int = 3):
         self._status = status
         self._max_hp = hp
         self._init_color = color
-        self.set_arm_type(arm_type)
+        self._texture = texture
+        self._rotation = 0
+        self.set_arm(arm)
 
         super.__init__(center_point, hp, self._init_color, mass)
 
@@ -62,27 +77,37 @@ class DefenseBlock(Block):
     def break_animation(self):
         raise NotImplementedError
 
+    def set_rotation(self, rotation: float):
+        # Cannon rotates independently
+
+        self._rotation = rotation
+        arm = self.get_arm()
+        arm_type = type(arm)
+        if arm_type == wp.Sword or arm_type == wp.Hammer:
+            arm.set_dir(rotation)
+
+    def move(self, delta_pos):
+        # Movement of block is not clear yet
+        new_coor = tuple(map(lambda x, y: x+y, self.get_coor(), delta_pos))
+        self.set_coor(new_coor)
     # Armed block
 
-    def attack(self) -> None:
+    def attack(self, opponent) -> None:
         # Unable to attack
-        if self.get_status() == 0 or self.get_arm_type() == None:
+        if self.get_status() == 0 or self.get_arm() == None:
             return
 
-        arm_type = self.get_arm_type()
-        match arm_type:
-            case "sword":
-                raise NotImplementedError("Arm_type: sword not implemented")
-            case "cannon":
-                raise NotImplementedError("Arm_type: cannon not implemented")
-            case "hammer":
-                raise NotImplementedError("Arm_type: hammer not implemented")
-            case _:
-                raise Exception("No such arm type", arm_type)
+        arm = self.get_arm()
+        arm.attack(opponent, self.get_coor())
 
-    def get_arm_type(self) -> str:
-        return self._arm_type
+    def get_arm(self):
+        return self._arm
 
-    def set_arm_type(self, arm_type) -> None:
-        if arm_type == "sword" or arm_type == "cannon" or arm_type == "hammer":
-            self._arm_type = arm_type
+    def set_arm(self, arm_type: str) -> None:
+        arm = None
+        if arm_type == "sword":
+            arm = wp.Sword(stat.sword_stat, self._rotation)
+        elif arm_type == "hammer":
+            arm = wp.Hammer(stat.hammer_stat, self._rotation)
+        elif arm_type == "cannon":
+            arm = wp.Cannon(stat.cannnon_stat, self._rotation)

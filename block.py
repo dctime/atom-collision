@@ -13,6 +13,9 @@ class Block(skin_bone.SkinBone):
         self._color = color
         self._points = []
         self._mass = mass
+        self._coor = center_point
+        self._rotation = 0
+
         self._points.append(
             (center_point[0]-self._block_size/2, center_point[1]-self._block_size/2))
         self._points.append(
@@ -44,6 +47,12 @@ class Block(skin_bone.SkinBone):
 
     def get_block_size(self) -> int:
         return self._block_size
+
+    def get_coor(self) -> tuple:
+        return self._coor
+
+    def set_coor(self, coor) -> None:
+        self._coor = coor
 
     def render(self, screen, is_debugging=False, debug_color=(255, 0, 0)):
         # draw ifself

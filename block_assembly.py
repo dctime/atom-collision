@@ -1,18 +1,20 @@
 from defense_block import DefenseBlock
+import leaf_blocks as lb
 import math
 
 
 class BlockAssembly():
     # i.e. player
-    def __init__(self, core_block: DefenseBlock, velocity: float, index: int = 0):
+    def __init__(self, game, core_block: DefenseBlock, velocity: float, index: int = 0):
         self._core = core_block
         self._rotation = 0
         self._index = index
         self._velocity = velocity
+        self._size = 0
 
         # Default #players = 2
         oppo_index = 1 if index == 0 else 0
-        self._oppo = game.players[oppo_index]
+        self._oppo = game.get_player(oppo_index)
 
         # key=coor, value=block
         # Represents coordinate-block pairs
@@ -26,6 +28,9 @@ class BlockAssembly():
     def render(self, screen):
         for coordinate, block in self._blocks.items():
             block.render(screen)
+            arm = block.get_arm()
+            if arm != None:
+                arm.render(screen)
 
     def add_block(self, block: DefenseBlock, core: bool = False):
         coor = block.get_coor()
@@ -108,3 +113,10 @@ class BlockAssembly():
             armi = bi.get_arm()
             if type(armi) == arm_type:
                 bi.attack(self._oppo)
+
+
+if __name__ == "__main__":
+    coor = (100, 100)
+    core = lb.CoreBlock(coor)
+    game = None
+    plr = BlockAssembly(game, core, 4.8763)

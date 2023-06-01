@@ -15,27 +15,33 @@ class DefenseBlock(Block):
         and others in Block
     """
 
-    def __init__(self, center_point: tuple, color: tuple, hp: int, mass: int, texture: str, arm=None, visible: bool = True, status: int = 3):
+    def __init__(self, center_point: tuple, color: tuple, hp: int, mass: int, texture: str, arm=None, visible: bool = True, status: int = 4):
         self._status = status
         self._max_hp = hp
         self._init_color = color
         self._texture = texture
         self._rotation = 0
-        self.set_arm(arm)
+        if arm != None:
+            self.set_arm(arm)
 
-        super.__init__(center_point, hp, self._init_color, mass)
+        super().__init__(center_point, hp, self._init_color, mass)
 
     def get_hp_ratio(self) -> float:
         return self._hp / self._max_hp
 
-    def set_status(self, status: int):
+    def set_status(self):
         # status: 0(hp=0),1(hp<25%),2(hp<50%),3(hp<75%),4(hp>75%)
-        if status < 0 or status > 4:
-            raise Exception('In set_status: Value of status out of range')
-        self._status = status
-        if status == 0:
-            self.break_animation()
-            self._visible = False
+        ratio = self.get_hp_ratio()
+        if ratio == 0:
+            self._status = 0
+        elif ratio < 0.25:
+            self._status = 1
+        elif ratio < 0.50:
+            self._status = 2
+        elif ratio < 0.75:
+            self._status = 3
+        else:
+            self._status = 4
 
     def get_status(self):
         return self._status
@@ -61,18 +67,8 @@ class DefenseBlock(Block):
                 raise Exception('In set_color: Value of status out of range')
 
     def damage_block(self, value):
-        super.damage_block(value)
-        ratio = self.get_hp_ratio()
-        if ratio == 0:
-            self.set_status(0)
-        elif ratio < 0.25:
-            self.set_status(1)
-        elif ratio < 0.50:
-            self.set_status(2)
-        elif ratio < 0.75:
-            self.set_status(3)
-        else:
-            self.set_status(4)
+        super().damage_block(value)
+        self.set_status()
 
     def break_animation(self):
         raise NotImplementedError
@@ -111,3 +107,32 @@ class DefenseBlock(Block):
             arm = wp.Hammer(stat.hammer_stat, self._rotation)
         elif arm_type == "cannon":
             arm = wp.Cannon(stat.cannnon_stat, self._rotation)
+        self._arm = arm
+
+
+if __name__ == "__main__":
+    coor = (100, 100)
+    color = (255, 255, 255)
+    hp = 100
+    mass = 100
+    texture = "whatever"
+
+    db = DefenseBlock(coor, color, hp, mass, texture)
+
+    print("\nSet arm:")
+    db.set_arm("sword")
+    print(type(db.get_arm()))
+
+    print("\nmove:")
+    db.move(coor)
+    print(db.get_coor())
+
+    print("\nSet rotation:")
+    db.set_rotation(180)
+    print(db._rotation)
+
+    print("\nStatus:")
+    print(db.get_status())
+    db.damage_block(48)
+    print(db.get_hp_ratio())
+    print(db.get_status())

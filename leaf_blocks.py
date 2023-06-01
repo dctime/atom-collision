@@ -4,7 +4,7 @@ from color import Color
 
 
 class WoodBlock(DefenseBlock):
-    def __init__(self, center_point: tuple, arm=None, visible=True, status=3):
+    def __init__(self, center_point: tuple, arm=None, visible=True, status=4):
         self._max_hp = 50
         self._mass = 15
         self._init_color = (133, 94, 66)
@@ -15,7 +15,7 @@ class WoodBlock(DefenseBlock):
 
 
 class StoneBlock(DefenseBlock):
-    def __init__(self, center_point: tuple, arm=None, visible=True, status=3):
+    def __init__(self, center_point: tuple, arm=None, visible=True, status=4):
         self._max_hp = 200
         self._mass = 100
         self._init_color = (136, 140, 141)
@@ -26,7 +26,7 @@ class StoneBlock(DefenseBlock):
 
 
 class CoreBlock(DefenseBlock):
-    def __init__(self, center_point: tuple, hp: int, color: tuple, mass: int, visible: bool = True, status: int = 3):
+    def __init__(self, center_point: tuple, visible: bool = True, status: int = 4):
         center_point = center_point
         hp = 100
         color = Color.CORE_COLOR
@@ -36,4 +36,15 @@ class CoreBlock(DefenseBlock):
         super().__init__(center_point, hp, color, mass, texture, arm, visible, status)
 
     def set_arm(self, arm) -> None:
-        raise Exception("Core has no arm")
+        print("Core has no arm")
+
+
+if __name__ == "__main__":
+    coor = (100, 100)
+
+    core = CoreBlock(coor)
+    wood = WoodBlock(coor)
+    stone = StoneBlock(coor)
+    print("texture of core is", core._texture)
+    print("texture of wood is", wood._texture)
+    print("texture of stone is", stone._texture)

@@ -1,11 +1,10 @@
-from defense_block import DefenseBlock
-from block_assembly import BlockAssembly
 import time
 import pygame
 import math
 
 # For melee, weapon turn with the block
 # For ranged, weapon turn independently
+# opponent or player is BlockAssembly
 
 
 class Weapon():
@@ -69,7 +68,7 @@ class Weapon():
         time.sleep(1/self._statistic["frequency"])
         self._available = True
 
-    def find_hit(self, player: BlockAssembly, area: pygame.Rect) -> DefenseBlock:
+    def find_hit(self, player, area: pygame.Rect):
         """
         Returns:
             The block in the area & closet to pos
@@ -93,13 +92,17 @@ class Weapon():
 
         return hit_block
 
-    def hit(self, block: DefenseBlock) -> None:
+    def hit(self, block) -> None:
         dmg = self._statistic["damage"]
         if block._texture == self._credit:
             dmg *= 2
         block.damage_block(dmg)
 
     def attack_animation(self) -> None:
+        # Virtual function
+        pass
+
+    def render(self, screen) -> None:
         # Virtual function
         pass
 
@@ -143,7 +146,7 @@ class Sword(Weapon):
             raise Exception("No such direction", dir)
         return pygame.Rect(left, top, width, height)
 
-    def attack(self, opponent: BlockAssembly, pos: tuple) -> None:
+    def attack(self, opponent, pos: tuple) -> None:
         super().attack()
         area = self.get_attack_area(pos)
         block_hit = self.find_hit(opponent, area)
@@ -222,7 +225,7 @@ class Hammer(Weapon):
         rect_2 = pygame.Rect(left_2, top_2, width_2, height_2)
         return [rect_1, rect_2]
 
-    def attack(self, opponent: BlockAssembly, pos: tuple) -> None:
+    def attack(self, opponent, pos: tuple) -> None:
         super().attack()
         area = self.get_attack_area(pos)
         block_hit = self.find_hit(opponent, area[1])  # more dmg zone first
@@ -248,7 +251,7 @@ class Cannon(Weapon):
         credit = "stone"
         super().__init__(statistic, rotation, credit=credit)
 
-    def attack(self, opponent: BlockAssembly, pos: tuple) -> None:
+    def attack(self, opponent, pos: tuple) -> None:
         super().attack()
 
         stat = self.get_stat()
@@ -270,7 +273,7 @@ class Cannon(Weapon):
 
 
 class Bullet():
-    def __init__(self, damage: float, pos: tuple, velocity: float, dir: tuple, radius: float, opponent: BlockAssembly, credit: str = "stone") -> None:
+    def __init__(self, damage: float, pos: tuple, velocity: float, dir: tuple, radius: float, opponent, credit: str = "stone") -> None:
         self._damage = damage
         self._pos = list(pos)
         self._velocity = velocity
@@ -310,8 +313,9 @@ class Bullet():
         corner_distance_sq = corner_x**2.0 + corner_y**2.0
         return corner_distance_sq <= r**2.0
 
-    def find_hit(self, player: BlockAssembly, area: tuple) -> DefenseBlock:
+    def find_hit(self, player, area: tuple):
         """
+        player is a BlockAssembly
         Returns:
             The block in the area & closet to pos
         """
@@ -335,7 +339,7 @@ class Bullet():
 
         return hit_block
 
-    def hit(self, block: DefenseBlock) -> None:
+    def hit(self, block) -> None:
         dmg = self._damage
         if block._texture == self._credit:
             dmg *= 2
@@ -347,3 +351,15 @@ class Bullet():
 
     def explode_animation(self) -> None:
         raise NotImplementedError("Explode animation not implemented yet")
+
+
+if __name__ == "__main__":
+    stat = {"range": 10}
+    sword = Sword(stat, 0)
+    hammer = Hammer(stat, 0)
+
+    print("\nGet attack area:")
+    area = sword.get_attack_area((100, 100))
+    print(area)
+    area = hammer.get_attack_area((100, 100))
+    print(area)

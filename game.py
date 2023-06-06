@@ -52,9 +52,14 @@ class Game:
         # Draw background, players and objects(follow the order)
         # render called below are all undefined yet
 
+        # TODO: make background alive
         # self._background.render()
+
+        for object in self._objects:
+            # TODO: add zero vector and unit size so the game wont break
+            object.render(self._screen)
+
         for player in self._players:
             player.render(self._screen, zero_vector, unit_size)
-        for object in self._objects:
-            object.render(self._screen)
+        
         pass

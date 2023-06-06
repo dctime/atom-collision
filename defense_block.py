@@ -21,6 +21,7 @@ class DefenseBlock(Block):
         self._init_color = color
         self._texture = texture
         self._rotation = 0
+        self._arm = None
         if arm != None:
             self.set_arm(arm)
 

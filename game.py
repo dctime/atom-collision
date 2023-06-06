@@ -1,9 +1,19 @@
-class game:
-    def __init__(self, background: str = None) -> None:
+from block_assembly import BlockAssembly
+
+class Game:
+    def __init__(self, pygame_screen, background: str = None) -> None:
         self._players = []  # list of players(BlockAssembly)
         self._objects = []   # list of objects(like bullet)
         self._phase = "build"
         self._background = background
+        self._screen = pygame_screen
+    
+    def add_players(self, player1:BlockAssembly, player2:BlockAssembly):
+        self._players = []
+        player1.set_oppo(player2)
+        player2.set_oppo(player1)
+        self._players.append(player1)
+        self._players.append(player2)
 
     def get_player(self, index: int):
         # Return players[index](BlockAssembly)
@@ -42,9 +52,9 @@ class game:
         # Draw background, players and objects(follow the order)
         # render called below are all undefined yet
 
-        self._background.render()
+        # self._background.render()
         for player in self._players:
-            player.render()
+            player.render(self._screen)
         for object in self._objects:
-            object.render()
+            object.render(self._screen)
         pass

@@ -5,16 +5,13 @@ import math
 
 class BlockAssembly():
     # i.e. player
-    def __init__(self, game, core_block: DefenseBlock, velocity: float, index: int = 0):
+    def __init__(self, core_block: DefenseBlock, velocity: float, index: int = 0):
         self._core = core_block
         self._rotation = 0
         self._index = index
         self._velocity = velocity
         self._size = 0
-
-        # Default #players = 2
-        oppo_index = 1 if index == 0 else 0
-        self._oppo = game.get_player(oppo_index)
+        self._oppo = None
 
         # key=coor, value=block
         # Represents coordinate-block pairs
@@ -47,6 +44,12 @@ class BlockAssembly():
                 self._block_neighbor[neighbor].append(block)
                 self._block_neighbor[block].append(neighbor)
         return self
+
+    def set_oppo(self, player):
+        '''
+        player is BlockAssembly's object
+        '''
+        self._oppo = player
 
     def get_blocks(self) -> dict:
         return self._blocks

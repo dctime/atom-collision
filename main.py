@@ -1,7 +1,9 @@
 import pygame
 from block import Block
+from leaf_blocks import CoreBlock
 from block_assembly import BlockAssembly
 import math
+from game import Game
 
 # Initialize Pygame
 pygame.init()
@@ -20,7 +22,13 @@ DEBUGGING_COLOR = (255, 0, 0)
 CENTER_OF_MASS_COLOR = (255,77,255)
 
 running = True
-block_assembly = BlockAssembly()
+
+
+game = Game(screen)
+player1 = BlockAssembly(CoreBlock((100, 100)), 0, 0)
+player2 = BlockAssembly(CoreBlock((200, 100)), 0, 1)
+game.add_players(player1, player2)
+
 clock = pygame.time.Clock()
 
 while running:
@@ -37,7 +45,7 @@ while running:
             running = False
             
     # Draw shapes on the screen
-    block_assembly.render(screen)
+    game.draw()
 
     # Update screen
     pygame.display.flip()

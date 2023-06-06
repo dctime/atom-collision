@@ -15,7 +15,7 @@ class BlockAssembly():
 
         # key=coor, value=block
         # Represents coordinate-block pairs
-        self._blocks = {}
+        self._blocks = {} # stores Block class objects
 
         # key=block, value = neighbors(list)
         # dictionary form of adjacency list

@@ -1,10 +1,8 @@
-import skin_bone
+from skin_bone import SkinBone
 import pygame
 
-STONE_COLOR = (125, 125, 125)
 
-
-class Block(skin_bone.SkinBone):
+class Block(SkinBone):
     def __init__(self, center_point: tuple, hp: int, color: tuple, mass: int, visible=True):
         super().__init__()
         self._hp = hp

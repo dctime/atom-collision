@@ -1,5 +1,6 @@
 from skin_bone import SkinBone
 import pygame
+import numpy as np
 
 
 class Block(SkinBone):
@@ -7,7 +8,7 @@ class Block(SkinBone):
         super().__init__()
         self._hp = hp
         self._visible = visible
-        self._block_size = 30
+        self._block_size = 1 # normalized, set the render unit size to make it look big
         self._color = color
         self._points = []
         self._mass = mass
@@ -52,12 +53,18 @@ class Block(SkinBone):
     def set_coor(self, coor) -> None:
         self._coor = coor
 
-    def render(self, screen, is_debugging=False, debug_color=(255, 0, 0)):
+    def render(self, screen, zero_vector:tuple, unit_size:int, is_debugging=False, debug_color=(255, 0, 0)):
         # draw ifself
         if self._visible:
-            pygame.draw.polygon(screen, self._color, self.get_nodes(), 0)
+            image_nodes = np.asarray(self.get_nodes())
+            image_nodes *= unit_size
+            image_nodes[:, 0] += zero_vector[0]
+            image_nodes[:, 1] += zero_vector[1]
+                    
+
+            pygame.draw.polygon(screen, self._color, image_nodes, 0)
 
             # Draw corners
             if is_debugging:
-                for node in self.get_nodes():
+                for node in image_nodes():
                     pygame.draw.circle(screen, debug_color, node, 3)

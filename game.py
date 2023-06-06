@@ -48,13 +48,13 @@ class Game:
         # Apply action on the player
         pass
 
-    def draw(self) -> None:
+    def draw(self, zero_vector:tuple, unit_size:int) -> None:
         # Draw background, players and objects(follow the order)
         # render called below are all undefined yet
 
         # self._background.render()
         for player in self._players:
-            player.render(self._screen)
+            player.render(self._screen, zero_vector, unit_size)
         for object in self._objects:
             object.render(self._screen)
         pass

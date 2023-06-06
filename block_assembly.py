@@ -22,9 +22,9 @@ class BlockAssembly():
         self._block_neighbor = {}
         self.add_block(core_block, core=True)
 
-    def render(self, screen):
+    def render(self, screen, zero_vector:tuple, unit_size:int):
         for coordinate, block in self._blocks.items():
-            block.render(screen)
+            block.render(screen, zero_vector, unit_size)
             arm = block.get_arm()
             if arm != None:
                 arm.render(screen)

@@ -1,6 +1,6 @@
 import pygame
 from block import Block
-from leaf_blocks import CoreBlock
+from leaf_blocks import CoreBlock, StoneBlock
 from block_assembly import BlockAssembly
 import math
 from game import Game
@@ -19,14 +19,13 @@ pygame.display.set_caption("My Pygame Screen")
 
 DEBUGGING_COLOR = (255, 0, 0)
 
-CENTER_OF_MASS_COLOR = (255,77,255)
-
 running = True
 
 
 game = Game(screen)
 player1 = BlockAssembly(CoreBlock((100, 100)), 0, 0)
 player2 = BlockAssembly(CoreBlock((200, 100)), 0, 1)
+player1.add_block(StoneBlock((100, 101)))
 game.add_players(player1, player2)
 
 clock = pygame.time.Clock()

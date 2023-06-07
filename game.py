@@ -7,6 +7,14 @@ class Game:
         self._phase = "build"
         self._background = background
         self._screen = pygame_screen
+
+    def run(self, zero_vector:tuple, unit_size:int) -> None:
+        # Call this in main loop
+        for player in self._players:
+            player.update()
+
+        self.__draw(zero_vector, unit_size)
+        pass
     
     def add_players(self, player1:BlockMechanism, player2:BlockMechanism):
         self._players = []
@@ -27,10 +35,6 @@ class Game:
         # Remove object from objects
         self._objects.remove(object)
 
-    def run(self) -> None:
-        # Call this in main loop
-        pass
-
     def get_phase(self) -> str:
         return self._phase
 
@@ -48,7 +52,7 @@ class Game:
         # Apply action on the player
         pass
 
-    def draw(self, zero_vector:tuple, unit_size:int) -> None:
+    def __draw(self, zero_vector:tuple, unit_size:int) -> None:
         # Draw background, players and objects(follow the order)
         # render called below are all undefined yet
 

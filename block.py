@@ -10,21 +10,21 @@ class Block(SkinBone):
         self._visible = visible
         self._block_size = 1 # normalized, set the render unit size to make it look big
         self._color = color
-        self._points = []
+        points = [] # sequential, tuple in list
         self._mass = mass
         self._coor = center_point
         self._rotation = 0
 
-        self._points.append(
+        points.append(
             (center_point[0]-self._block_size/2, center_point[1]-self._block_size/2))
-        self._points.append(
+        points.append(
             (center_point[0]+self._block_size/2, center_point[1]-self._block_size/2))
-        self._points.append(
+        points.append(
             (center_point[0]+self._block_size/2, center_point[1]+self._block_size/2))
-        self._points.append(
+        points.append(
             (center_point[0]-self._block_size/2, center_point[1]+self._block_size/2))
 
-        self.set_nodes(self._points)
+        self.set_nodes(points)
 
     def get_hp(self):
         return self._hp
@@ -42,7 +42,7 @@ class Block(SkinBone):
         self._hp += value
 
     def get_left_top(self) -> tuple:
-        return self._points[0]
+        return self.get_nodes[0]
 
     def get_block_size(self) -> int:
         return self._block_size
@@ -52,6 +52,22 @@ class Block(SkinBone):
 
     def set_coor(self, coor) -> None:
         self._coor = coor
+        points = []
+        points.append(
+            (self._coor[0]-self._block_size/2, self._coor[1]-self._block_size/2))
+        points.append(
+            (self._coor[0]+self._block_size/2, self._coor[1]-self._block_size/2))
+        points.append(
+            (self._coor[0]+self._block_size/2, self._coor[1]+self._block_size/2))
+        points.append(
+            (self._coor[0]-self._block_size/2, self._coor[1]+self._block_size/2))
+        self.set_nodes(points)
+
+    def move(self, delta_pos):
+        # Movement of block is not clear yet
+        new_coor = tuple(map(lambda x, y: x+y, self.get_coor(), delta_pos))
+        self.set_coor(new_coor)
+    # Armed block
 
     def render(self, screen, zero_vector:tuple, unit_size:int, is_debugging=False, debug_color=(255, 0, 0)):
         # draw ifself

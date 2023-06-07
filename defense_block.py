@@ -20,7 +20,6 @@ class DefenseBlock(Block):
         self._max_hp = hp
         self._init_color = color
         self._texture = texture
-        self._rotation = 0
         self._arm = None
         if arm != None:
             self.set_arm(arm)
@@ -82,12 +81,6 @@ class DefenseBlock(Block):
         arm_type = type(arm)
         if arm_type == wp.Sword or arm_type == wp.Hammer:
             arm.set_dir(rotation)
-
-    def move(self, delta_pos):
-        # Movement of block is not clear yet
-        new_coor = tuple(map(lambda x, y: x+y, self.get_coor(), delta_pos))
-        self.set_coor(new_coor)
-    # Armed block
 
     def attack(self, opponent) -> None:
         # Unable to attack

@@ -13,7 +13,7 @@ class BlockAssembly():
 
         # key=coor, value=block
         # Represents coordinate-block pairs
-        self._blocks = {} # stores Block class objects
+        self._blocks = {} # stores {(x, y): Block class object}
 
         # key=block, value = neighbors(list)
         # dictionary form of adjacency list
@@ -85,8 +85,8 @@ class BlockAssembly():
     def get_coor(self) -> tuple:
         return self._core.get_coor()
 
-    def set_rotation(self, rotation: float) -> None:
-        self._rotation = rotation
+    # def set_rotation(self, rotation: float) -> None:
+    #     self._rotation = rotation
 
     def attack(self, arm_type) -> None:
         # Call this function in main

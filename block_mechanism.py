@@ -3,27 +3,25 @@ from leaf_blocks import CoreBlock
 import math
 
 class BlockMechanism(BlockAssembly):
-    def __init__(self, core_block: CoreBlock, velocity:float):
-        self._velocity = velocity 
-        self._rotation = 0
+    def __init__(self, core_block: CoreBlock, momentum:tuple = (0, 0)):
+        self._momentum = momentum
+        self._angular_momentum = 0
+        self._mass = 0
         
         super().__init__(core_block)
+        self.__update_mass()
 
-    def move(self, dir: tuple) -> None:
-        delta_pos = (dir[0]*self._velocity, dir[1]*self._velocity)
-        slope = dir[1]/dir[0]
-        rad = math.atan(slope)
+    def move(self) -> None:
+        for coori, bi in self.get_blocks().items():
+            bi.move((self._momentum[0]/self._mass, self._momentum[1]/self._mass))
 
-        # deg in [-90,90]
-        deg = rad/math.pi*180
+    def __update_mass(self) -> None:
+        total_mass = 0
+        for _, block in self._blocks.items():
+            total_mass += block._mass
 
-        # map deg to [0,360]
-        if dir[0] < 0:
-            deg += 180
-        if deg < 0:
-            deg += 360
+        self._mass = total_mass
 
-        self.set_rotation(deg)
-        for coori, bi in self.get_blocks():
-            bi.move(delta_pos)
-            bi.set_rotation(deg)
+    def update(self):
+        # call this in main loop
+        self.move()

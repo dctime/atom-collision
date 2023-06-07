@@ -10,6 +10,9 @@ class BlockMechanism(BlockAssembly):
         
         super().__init__(core_block)
         self.__update_mass()
+    
+    def add_force(self, force:tuple, location:tuple, time_between_frame:float):
+        self._momentum = (self._momentum[0] + force[0]*time_between_frame, self._momentum[1] + force[1]*time_between_frame)
 
     def move(self) -> None:
         for coori, bi in self.get_blocks().items():

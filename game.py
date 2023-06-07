@@ -1,5 +1,5 @@
 from block_assembly import BlockAssembly
-
+from block_mechanism import BlockMechanism
 class Game:
     def __init__(self, pygame_screen, background: str = None) -> None:
         self._players = []  # list of players(BlockAssembly)
@@ -8,7 +8,7 @@ class Game:
         self._background = background
         self._screen = pygame_screen
     
-    def add_players(self, player1:BlockAssembly, player2:BlockAssembly):
+    def add_players(self, player1:BlockMechanism, player2:BlockMechanism):
         self._players = []
         player1.set_oppo(player2)
         player2.set_oppo(player1)

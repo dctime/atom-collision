@@ -1,15 +1,13 @@
-from defense_block import DefenseBlock
+from leaf_blocks import CoreBlock
 import leaf_blocks as lb
 import math
+from defense_block import DefenseBlock
 
 
 class BlockAssembly():
     # i.e. player
-    def __init__(self, core_block: DefenseBlock, velocity: float, index: int = 0):
+    def __init__(self, core_block: CoreBlock):
         self._core = core_block
-        self._rotation = 0
-        self._index = index
-        self._velocity = velocity
         self._size = 0
         self._oppo = None
 
@@ -86,25 +84,6 @@ class BlockAssembly():
 
     def get_coor(self) -> tuple:
         return self._core.get_coor()
-
-    def move(self, dir: tuple) -> None:
-        delta_pos = (dir[0]*self._velocity, dir[1]*self._velocity)
-        slope = dir[1]/dir[0]
-        rad = math.atan(slope)
-
-        # deg in [-90,90]
-        deg = rad/math.pi*180
-
-        # map deg to [0,360]
-        if dir[0] < 0:
-            deg += 180
-        if deg < 0:
-            deg += 360
-
-        self.set_rotation(deg)
-        for coori, bi in self.get_blocks():
-            bi.move(delta_pos)
-            bi.set_rotation(deg)
 
     def set_rotation(self, rotation: float) -> None:
         self._rotation = rotation

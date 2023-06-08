@@ -58,8 +58,8 @@ while running:
 
     # game events
     if game_time < 1000:
-        player1.add_force((10, 0), (0, 0), 1/FRAMERATE)
-        player2.add_force((-10, 0), (0, 0), 1/FRAMERATE)
+        player1.add_force((10, 0), (0, 10), 1/FRAMERATE)
+        player2.add_force((-10, 0), (0, 10), 1/FRAMERATE)
     elif game_time >= 1000 and game_time <= 2000:
         player1.add_force((-12, 0), (0, 0), 1/FRAMERATE)
         player2.add_force((12, 0), (0, 0), 1/FRAMERATE)

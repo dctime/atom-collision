@@ -19,7 +19,10 @@ class BlockMechanism(BlockAssembly):
     def render(self, screen, zero_vector:tuple, unit_size:int, is_debugging=False, debug_color=(255, 0, 0)):
         super().render(screen, zero_vector, unit_size)
     
-    def add_force(self, force:tuple, location:tuple, time_between_frame:float, max_omega=100):
+    def add_force(self, force:tuple, location:tuple, time_between_frame:float, max_omega=2):
+        '''
+        WARN if the force or momentum of arm is to big the body will break
+        '''
         self._momentum = (self._momentum[0] + force[0]*time_between_frame, self._momentum[1] + force[1]*time_between_frame)
 
         momentum = self._momentum

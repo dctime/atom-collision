@@ -20,7 +20,6 @@ class BlockMechanism(BlockAssembly):
         super().render(screen, zero_vector, unit_size)
     
     def add_force(self, force:tuple, location:tuple, time_between_frame:float, max_augular_momentum=8000):
-        # FIXME: A little bit weird, use main again
         self._momentum = (self._momentum[0] + force[0]*time_between_frame, self._momentum[1] + force[1]*time_between_frame)
 
         momentum = self._momentum
@@ -44,11 +43,18 @@ class BlockMechanism(BlockAssembly):
         '''
         move stuff in a tick of time
         '''
-        for coori, bi in self.get_blocks().items():
-            bi.move((self._momentum[0]/self._mass*time_between_frame*100, self._momentum[1]/self._mass*time_between_frame*100))
+        for _, block in self.get_blocks().items():
+            block.move((self._momentum[0]/self._mass*time_between_frame*100, self._momentum[1]/self._mass*time_between_frame*100))
             self.__update_properties()
-            bi.rotate(self.get_center_of_mass_coor(), self._angular_momentum/self._momentum_of_inertia*time_between_frame)
+            block.rotate(self.get_center_of_mass_coor(), self._angular_momentum/self._momentum_of_inertia*time_between_frame)
             self.__update_properties()
+
+    def move_to(self, coor:tuple):
+        everyone_reset_vector = (-self.get_coor()[0], -self.get_coor()[1])
+        for _, block in self.get_blocks().items():
+            print(block)
+            block.move(everyone_reset_vector)
+            block.move(coor)
 
     def __update_mass(self) -> None:
         total_mass = 0

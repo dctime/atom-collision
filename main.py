@@ -34,6 +34,7 @@ player1.add_block(WoodBlock((0, 2)))
 player1.add_block(StoneBlock((1, 2)))
 player1.add_block(WoodBlock((1, 1)))
 game.add_players(player1, player2)
+player1.move_to((-10, 0))
 
 clock = pygame.time.Clock()
 

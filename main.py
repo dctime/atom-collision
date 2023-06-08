@@ -30,18 +30,15 @@ running = True
 game = Game(screen)
 player1 = BlockMechanism(CoreBlock((0, 0)))
 player2 = BlockMechanism(CoreBlock((0, 0)))
-player1.add_block(StoneBlock((0, 1)))
-player1.add_block(WoodBlock((0, 2)))
-player1.add_block(StoneBlock((1, 2)))
-player1.add_block(WoodBlock((1, 1)))
+player1.add_block(WoodBlock((1, 0)))
 game.add_players(player1, player2)
-player1.move_to((-10, 0))
-player2.move_to((10, 5))
+player1.move_to((-3, 0))
+player2.move_to((3, 0))
 
 clock = pygame.time.Clock()
 game_time = 0
 while running:
-    print("Main: GAME TIME:", game_time)
+    # print("Main: GAME TIME:", game_time)
     screen.fill((0, 0, 0))
     # Handle events
     for event in pygame.event.get():

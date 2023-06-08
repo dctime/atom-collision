@@ -31,7 +31,6 @@ class BlockMechanism(BlockAssembly):
         force = list(force)
         force.append(0)
         tau = np.cross(np.array(momentum_arm).transpose(), np.array(force).transpose()).transpose()
-        print(abs(self._angular_momentum/self._momentum_of_inertia))
         if max_omega-abs(self._angular_momentum/self._momentum_of_inertia)>0:
             self._angular_momentum += tau[2]/100 * (max_omega-abs(self._angular_momentum/self._momentum_of_inertia)) / max_omega
         else:
@@ -59,7 +58,6 @@ class BlockMechanism(BlockAssembly):
     def move_to(self, coor:tuple):
         everyone_reset_vector = (-self.get_coor()[0], -self.get_coor()[1])
         for _, block in self.get_blocks().items():
-            print(block)
             block.move(everyone_reset_vector)
             block.move(coor)
 

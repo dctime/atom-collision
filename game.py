@@ -1,18 +1,25 @@
 from block_assembly import BlockAssembly
 from block_mechanism import BlockMechanism
+from collision_director import CollisionDirector
 class Game:
     def __init__(self, pygame_screen, background: str = None) -> None:
-        self._players = []  # list of players(BlockAssembly)
+        self._players = []  # list of players(BlockMechanism)
         self._objects = []   # list of objects(like bullet)
         self._phase = "build"
         self._background = background
         self._screen = pygame_screen
+        self._collision_director = CollisionDirector()
 
     def tick(self, zero_vector:tuple, unit_size:int, time_between_frame:float) -> None:
         # Call this in main loop
         for player in self._players:
             player.move_by_physics(time_between_frame)
-
+        
+        for index1 in range(len(self._players)):
+            for index2 in range(index1+1, len(self._players)):
+                if self._collision_director.is_collide(self._players[index1], self._players[index2]):
+                    print("GAME: COLLIDE")
+                    
         self.__draw(zero_vector, unit_size)
         pass
     

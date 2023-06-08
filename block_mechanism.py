@@ -13,9 +13,7 @@ class BlockMechanism(BlockAssembly):
         self._center_of_mass_coor = (0, 0)
         
         super().__init__(core_block)
-        self.__update_mass()
-        self.__update_center_of_mass_coor()
-        self.__update_momentum_of_inertia()
+        self.__update_properties()
 
     def render(self, screen, zero_vector:tuple, unit_size:int, is_debugging=False, debug_color=(255, 0, 0)):
         super().render(screen, zero_vector, unit_size)
@@ -31,7 +29,7 @@ class BlockMechanism(BlockAssembly):
         force.append(0)
         tau = np.cross(np.array(momentum_arm).transpose(), np.array(force).transpose()).transpose()
         self._angular_momentum += tau[2]
-        
+
     def get_center_of_mass_coor(self):
         return self._center_of_mass_coor
     
@@ -41,7 +39,9 @@ class BlockMechanism(BlockAssembly):
         '''
         for coori, bi in self.get_blocks().items():
             bi.move((self._momentum[0]/self._mass*time_between_frame*100, self._momentum[1]/self._mass*time_between_frame*100))
+            self.__update_properties()
             bi.rotate(self.get_center_of_mass_coor(), self._angular_momentum/self._momentum_of_inertia*time_between_frame)
+            self.__update_properties()
 
     def __update_mass(self) -> None:
         total_mass = 0
@@ -68,9 +68,7 @@ class BlockMechanism(BlockAssembly):
 
         self._momentum_of_inertia = total_inertia
 
-    def update(self, time_between_frame:float):
-        # call this in main loop
+    def __update_properties(self):
         self.__update_mass()
         self.__update_center_of_mass_coor()
         self.__update_momentum_of_inertia()
-        self.move(time_between_frame)

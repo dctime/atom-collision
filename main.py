@@ -32,6 +32,7 @@ player2 = BlockMechanism(CoreBlock((2, 2)))
 player1.add_block(StoneBlock((0, 1)))
 player1.add_block(WoodBlock((0, 2)))
 player1.add_block(StoneBlock((1, 2)))
+player1.add_block(WoodBlock((1, 1)))
 game.add_players(player1, player2)
 
 clock = pygame.time.Clock()
@@ -51,7 +52,7 @@ while running:
             
     # Draw shapes on the screen
     game.run(MID_SCREEN_POINT, UNIT_SIZE, 1/FRAMERATE)
-    player1.add_force((10, 0), (0, 5), 1/FRAMERATE)
+    player1.add_force((10, 0), (0, 1), 1/FRAMERATE)
 
     # Draw debugging points on the screen
     pygame.draw.circle(screen, Color.MID_SCREEN_COLOR, MID_SCREEN_POINT, 3)

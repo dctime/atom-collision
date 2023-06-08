@@ -40,7 +40,7 @@ class BlockMechanism(BlockAssembly):
     def get_angular_momentum(self):
         return self._angular_momentum
     
-    def move(self, time_between_frame:float) -> None:
+    def move_by_physics(self, time_between_frame:float) -> None:
         '''
         move stuff in a tick of time
         '''

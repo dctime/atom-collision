@@ -11,7 +11,7 @@ class Game:
     def run(self, zero_vector:tuple, unit_size:int, time_between_frame:float) -> None:
         # Call this in main loop
         for player in self._players:
-            player.move(time_between_frame)
+            player.move_by_physics(time_between_frame)
 
         self.__draw(zero_vector, unit_size)
         pass

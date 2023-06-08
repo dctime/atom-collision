@@ -28,7 +28,7 @@ running = True
 
 game = Game(screen)
 player1 = BlockMechanism(CoreBlock((0, 0)))
-player2 = BlockMechanism(CoreBlock((2, 2)))
+player2 = BlockMechanism(CoreBlock((0, 0)))
 player1.add_block(StoneBlock((0, 1)))
 player1.add_block(WoodBlock((0, 2)))
 player1.add_block(StoneBlock((1, 2)))
@@ -46,13 +46,14 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             x, y = pygame.mouse.get_pos()
             print("Nothing happens")
-                
+
         if event.type == pygame.QUIT:
             running = False
             
     # Draw shapes on the screen
     game.run(MID_SCREEN_POINT, UNIT_SIZE, 1/FRAMERATE)
     player1.add_force((10, 0), (0, 3), 1/FRAMERATE)
+    player2.add_force((10, 0), (0, 3), 1/FRAMERATE)
     print(player1.get_angular_momentum())
 
     # Draw debugging points on the screen

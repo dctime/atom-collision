@@ -87,11 +87,8 @@ class Block(SkinBone):
         self.set_nodes(return_nodes)
 
         temp_coor = self.get_coor()
-        temp_coor = (temp_coor[0]-pivot_point[0], temp_coor[1]-pivot_point[1])
-        temp_coor = np.asarray(temp_coor)
-        temp_coor = temp_coor.transpose()
-        temp_coor = rotation_matrix @ temp_coor
-        temp_coor = temp_coor.transpose()
+        temp_coor = np.array((temp_coor[0]-pivot_point[0], temp_coor[1]-pivot_point[1]))
+        temp_coor = rotation_matrix.dot(temp_coor)
 
         self.set_coor((temp_coor[0]+pivot_point[0], temp_coor[1]+pivot_point[1]))
 

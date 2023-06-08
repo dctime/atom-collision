@@ -37,7 +37,7 @@ player1.add_block(StoneBlock((1, 2)))
 player1.add_block(WoodBlock((1, 1)))
 game.add_players(player1, player2)
 player1.move_to((-10, 0))
-player2.move_to((10, 0))
+player2.move_to((10, 5))
 
 clock = pygame.time.Clock()
 game_time = 0
@@ -58,11 +58,17 @@ while running:
 
     # game events
     if game_time < 1000:
-        player1.add_force((10, 0), (0, 3), 1/FRAMERATE)
-        player2.add_force((-10, 0), (0, 3), 1/FRAMERATE)
-    else:
-        player1.add_force((-10, 0), (0, 3), 1/FRAMERATE)
-        player2.add_force((10, 0), (0, 3), 1/FRAMERATE)
+        player1.add_force((10, 0), (0, 0), 1/FRAMERATE)
+        player2.add_force((-10, 0), (0, 0), 1/FRAMERATE)
+    elif game_time >= 1000 and game_time <= 2000:
+        player1.add_force((-12, 0), (0, 0), 1/FRAMERATE)
+        player2.add_force((12, 0), (0, 0), 1/FRAMERATE)
+    elif game_time >= 5000 and game_time <= 5500:
+        player1.add_force((0, -5), (0, 0), 1/FRAMERATE)
+        player2.add_force((0, 5), (0, 0), 1/FRAMERATE)
+    elif game_time >= 5500 and game_time <= 6000:
+        player1.add_force((10, 15), (0, 0), 1/FRAMERATE)
+        player2.add_force((-10, -15), (0, 0), 1/FRAMERATE)
 
     # Draw debugging points on the screen
     pygame.draw.circle(screen, Color.MID_SCREEN_COLOR, MID_SCREEN_POINT, 3)

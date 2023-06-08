@@ -3,6 +3,7 @@ from leaf_blocks import CoreBlock
 import pygame
 import math
 import numpy as np
+from scipy.stats import norm
 
 class BlockMechanism(BlockAssembly):
     def __init__(self, core_block: CoreBlock, momentum:tuple = (0, 0)):
@@ -18,7 +19,7 @@ class BlockMechanism(BlockAssembly):
     def render(self, screen, zero_vector:tuple, unit_size:int, is_debugging=False, debug_color=(255, 0, 0)):
         super().render(screen, zero_vector, unit_size)
     
-    def add_force(self, force:tuple, location:tuple, time_between_frame:float):
+    def add_force(self, force:tuple, location:tuple, time_between_frame:float, max_augular_momentum=8000):
         # FIXME: A little bit weird, use main again
         self._momentum = (self._momentum[0] + force[0]*time_between_frame, self._momentum[1] + force[1]*time_between_frame)
 
@@ -28,7 +29,7 @@ class BlockMechanism(BlockAssembly):
         force = list(force)
         force.append(0)
         tau = np.cross(np.array(momentum_arm).transpose(), np.array(force).transpose()).transpose()
-        self._angular_momentum += tau[2]
+        self._angular_momentum += tau[2] * (max_augular_momentum - abs(self._angular_momentum)) / max_augular_momentum
 
     def get_center_of_mass_coor(self):
         return self._center_of_mass_coor

@@ -21,12 +21,16 @@ class BlockMechanism(BlockAssembly):
         super().render(screen, zero_vector, unit_size)
     
     def add_force(self, force:tuple, location:tuple, time_between_frame:float):
+        # FIXME: A little bit weird, use main again
         self._momentum = (self._momentum[0] + force[0]*time_between_frame, self._momentum[1] + force[1]*time_between_frame)
 
         momentum = self._momentum
-        momentum_arm = (location[0]-self._center_of_mass_coor[0], location[1]-self._center_of_mass_coor[1])
-        
-        self._angular_momentum += (momentum[0] * momentum_arm[1] - momentum[1] * momentum_arm[0])
+        momentum_arm = [location[0]-self._center_of_mass_coor[0], location[1]-self._center_of_mass_coor[1]]
+        momentum_arm.append(0)
+        force = list(force)
+        force.append(0)
+        tau = np.cross(np.array(momentum_arm).transpose(), np.array(force).transpose()).transpose()
+        self._angular_momentum += tau[2]
         
     def get_center_of_mass_coor(self):
         return self._center_of_mass_coor

@@ -17,7 +17,8 @@ pygame.init()
 # screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 screen = pygame.display.set_mode((1200, 800))
 screen_x_size, screen_y_size = screen.get_size()
-mid_screen_point = (screen_x_size/2, screen_y_size/2)
+MID_SCREEN_POINT = (screen_x_size/2, screen_y_size/2)
+UNIT_SIZE = 30
 FRAMERATE = 500
 
 # Set window title
@@ -49,16 +50,19 @@ while running:
             running = False
             
     # Draw shapes on the screen
-    game.run(mid_screen_point, 15, 1/FRAMERATE)
-    player1.add_force((1, 0), (0, 0), 1/FRAMERATE)
+    game.run(MID_SCREEN_POINT, UNIT_SIZE, 1/FRAMERATE)
+    player1.add_force((10, 0), (0, 5), 1/FRAMERATE)
 
     # Draw debugging points on the screen
-    pygame.draw.circle(screen, Color.DEBUGGING_COLOR, mid_screen_point, 3)
+    pygame.draw.circle(screen, Color.MID_SCREEN_COLOR, MID_SCREEN_POINT, 3)
 
     # Draw center of mass of player1
-    pygame.draw.circle(screen, Color.DEBUGGING_COLOR, change_normalized_into_real(mid_screen_point, 15, player1.get_center_of_mass_coor()), 3)
+    pygame.draw.circle(screen, Color.CENTER_OF_MASS_COLOR, change_normalized_into_real(MID_SCREEN_POINT, UNIT_SIZE, player1.get_center_of_mass_coor()), 3)
     # Draw center of mass of player2
-    pygame.draw.circle(screen, Color.DEBUGGING_COLOR, change_normalized_into_real(mid_screen_point, 15, player2.get_center_of_mass_coor()), 3)
+    pygame.draw.circle(screen, Color.CENTER_OF_MASS_COLOR, change_normalized_into_real(MID_SCREEN_POINT, UNIT_SIZE, player2.get_center_of_mass_coor()), 3)
+    # draw every blocks coor
+    for _, block in player1.get_blocks().items():
+        pygame.draw.circle(screen, Color.BLOCK_COOR_COLOR, change_normalized_into_real(MID_SCREEN_POINT, UNIT_SIZE, block.get_coor()), 2)
 
     # Update screen
     pygame.display.flip()

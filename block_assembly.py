@@ -83,6 +83,9 @@ class BlockAssembly():
         pass
 
     def get_coor(self) -> tuple:
+        '''
+        cores coordinate
+        '''
         return self._core.get_coor()
 
     # def set_rotation(self, rotation: float) -> None:

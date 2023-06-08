@@ -1,6 +1,7 @@
 from skin_bone import SkinBone
 import pygame
 import numpy as np
+import copy
 
 
 class Block(SkinBone):
@@ -10,11 +11,11 @@ class Block(SkinBone):
         self._visible = visible
         self._block_size = 1 # normalized, set the render unit size to make it look big
         self._color = color
-        points = [] # sequential, tuple in list
         self._mass = mass
         self._coor = center_point
         self._rotation = 0
 
+        points = [] # sequential, tuple in list
         points.append(
             (center_point[0]-self._block_size/2, center_point[1]-self._block_size/2))
         points.append(
@@ -49,25 +50,50 @@ class Block(SkinBone):
 
     def get_coor(self) -> tuple:
         return self._coor
+    
+    def get_mass(self) -> int:
+        return self._mass
 
     def set_coor(self, coor) -> None:
         self._coor = coor
-        points = []
-        points.append(
-            (self._coor[0]-self._block_size/2, self._coor[1]-self._block_size/2))
-        points.append(
-            (self._coor[0]+self._block_size/2, self._coor[1]-self._block_size/2))
-        points.append(
-            (self._coor[0]+self._block_size/2, self._coor[1]+self._block_size/2))
-        points.append(
-            (self._coor[0]-self._block_size/2, self._coor[1]+self._block_size/2))
-        self.set_nodes(points)
 
-    def move(self, delta_pos):
+    def move(self, dir_vector:tuple) -> None: 
         # Movement of block is not clear yet
-        new_coor = tuple(map(lambda x, y: x+y, self.get_coor(), delta_pos))
+        new_coor = tuple(map(lambda x, y: x+y, self.get_coor(), dir_vector))
         self.set_coor(new_coor)
-    # Armed block
+        new_nodes = []
+        for node in self.get_nodes():
+            new_nodes.append((node[0]+dir_vector[0], node[1]+dir_vector[1]))
+        self.set_nodes(new_nodes)
+        # Armed block
+
+    def rotate(self, pivot_point:tuple, theta:float) -> None:
+        temp_nodes = []
+        for node in self.get_nodes():
+            temp_nodes.append([node[0]-pivot_point[0], node[1]-pivot_point[1]])
+
+        temp_nodes = np.asarray(temp_nodes)
+        temp_nodes = temp_nodes.transpose()
+        rotation_matrix = np.array([[np.cos(theta), -np.sin(theta)],
+                                    [np.sin(theta),  np.cos(theta)]])
+        temp_nodes = rotation_matrix @ temp_nodes
+        temp_nodes = temp_nodes.transpose()
+        
+        return_nodes = []
+        for node in temp_nodes:
+            return_nodes.append([node[0]+pivot_point[0], node[1]+pivot_point[1]])
+
+        self.set_nodes(return_nodes)
+
+        temp_coor = self.get_coor()
+        temp_coor = (temp_coor[0]-pivot_point[0], temp_coor[1]-pivot_point[1])
+        temp_coor = np.asarray(temp_coor)
+        temp_coor = temp_coor.transpose()
+        temp_coor = rotation_matrix @ temp_coor
+        temp_coor = temp_coor.transpose()
+
+        self.set_coor((temp_coor[0]+pivot_point[0], temp_coor[1]+pivot_point[1]))
+
 
     def render(self, screen, zero_vector:tuple, unit_size:int, is_debugging=False, debug_color=(255, 0, 0)):
         # draw ifself

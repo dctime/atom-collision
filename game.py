@@ -8,10 +8,10 @@ class Game:
         self._background = background
         self._screen = pygame_screen
 
-    def run(self, zero_vector:tuple, unit_size:int) -> None:
+    def run(self, zero_vector:tuple, unit_size:int, time_between_frame:float) -> None:
         # Call this in main loop
         for player in self._players:
-            player.update()
+            player.update(time_between_frame)
 
         self.__draw(zero_vector, unit_size)
         pass

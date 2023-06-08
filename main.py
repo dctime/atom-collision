@@ -7,6 +7,9 @@ import math
 from game import Game
 from color import Color
 
+def change_normalized_into_real(zero_vector, unit_size, target_vector):
+    return (target_vector[0]*unit_size+zero_vector[0], target_vector[1]*unit_size+zero_vector[1])
+
 # Initialize Pygame
 pygame.init()
 
@@ -46,12 +49,16 @@ while running:
             running = False
             
     # Draw shapes on the screen
-    game.run(mid_screen_point, unit_size=15)
-    player1.add_force((3, 0), (0, 0), 1/FRAMERATE)
+    game.run(mid_screen_point, 15, 1/FRAMERATE)
+    player1.add_force((1, 0), (0, 0), 1/FRAMERATE)
 
     # Draw debugging points on the screen
-    pygame.draw.circle(screen, Color.DEBUGGING_COLOR, (screen_x_size/2, screen_y_size/2), 3)
-    
+    pygame.draw.circle(screen, Color.DEBUGGING_COLOR, mid_screen_point, 3)
+
+    # Draw center of mass of player1
+    pygame.draw.circle(screen, Color.DEBUGGING_COLOR, change_normalized_into_real(mid_screen_point, 15, player1.get_center_of_mass_coor()), 3)
+    # Draw center of mass of player2
+    pygame.draw.circle(screen, Color.DEBUGGING_COLOR, change_normalized_into_real(mid_screen_point, 15, player2.get_center_of_mass_coor()), 3)
 
     # Update screen
     pygame.display.flip()

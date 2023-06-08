@@ -52,7 +52,8 @@ while running:
             
     # Draw shapes on the screen
     game.run(MID_SCREEN_POINT, UNIT_SIZE, 1/FRAMERATE)
-    player1.add_force((10, 0), (0, 1), 1/FRAMERATE)
+    player1.add_force((10, 0), (0, 3), 1/FRAMERATE)
+    print(player1.get_angular_momentum())
 
     # Draw debugging points on the screen
     pygame.draw.circle(screen, Color.MID_SCREEN_COLOR, MID_SCREEN_POINT, 3)

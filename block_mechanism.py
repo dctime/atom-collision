@@ -33,6 +33,12 @@ class BlockMechanism(BlockAssembly):
     def get_center_of_mass_coor(self):
         return self._center_of_mass_coor
     
+    def get_momentum(self):
+        return self._momentum
+    
+    def get_angular_momentum(self):
+        return self._angular_momentum
+    
     def move(self, time_between_frame:float) -> None:
         '''
         move stuff in a tick of time

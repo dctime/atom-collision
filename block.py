@@ -68,6 +68,7 @@ class Block(SkinBone):
         # Armed block
 
     def rotate(self, pivot_point:tuple, theta:float) -> None:
+        theta = theta % (2*np.pi)
         temp_nodes = []
         for node in self.get_nodes():
             temp_nodes.append([node[0]-pivot_point[0], node[1]-pivot_point[1]])

@@ -8,7 +8,7 @@ class Game:
         self._background = background
         self._screen = pygame_screen
 
-    def run(self, zero_vector:tuple, unit_size:int, time_between_frame:float) -> None:
+    def tick(self, zero_vector:tuple, unit_size:int, time_between_frame:float) -> None:
         # Call this in main loop
         for player in self._players:
             player.move_by_physics(time_between_frame)

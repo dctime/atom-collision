@@ -3,7 +3,6 @@ from block import Block
 from leaf_blocks import CoreBlock, StoneBlock, WoodBlock
 from block_assembly import BlockAssembly
 from block_mechanism import BlockMechanism
-from block_mechanism_with_collision import BlockMechanismWithCollision
 import math
 from game import Game
 from color import Color
@@ -29,8 +28,8 @@ running = True
 
 # set up the environment
 game = Game(screen)
-player1 = BlockMechanismWithCollision(CoreBlock((0, 0)))
-player2 = BlockMechanismWithCollision(CoreBlock((0, 0)))
+player1 = BlockMechanism(CoreBlock((0, 0)))
+player2 = BlockMechanism(CoreBlock((0, 0)))
 player1.add_block(StoneBlock((0, 1)))
 player1.add_block(WoodBlock((0, 2)))
 player1.add_block(StoneBlock((1, 2)))

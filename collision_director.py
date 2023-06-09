@@ -45,6 +45,18 @@ class CollisionDirector():
                         # print(node, self._normal_vector_for_impactor(impact_line, line))
                         return node, self._normal_vector_for_impactor(impact_line, line)
                 return None
+            
+        for node_index in range(len(block1.get_nodes())):
+            if self.is_node_in_block(block1.get_nodes()[node_index], block2):
+                node = tuple(block1.get_nodes()[node_index])
+                impact_line = [block1.get_previous_nodes()[node_index], tuple(block1.get_nodes()[node_index])]
+                impact_line[1] = ((impact_line[0][0]-impact_line[1][0])*IMPACT_LINE_STRETCH+impact_line[1][0], (impact_line[0][1]-impact_line[1][1])*IMPACT_LINE_STRETCH+impact_line[1][1])
+                impact_line[0] = ((impact_line[1][0]-impact_line[0][0])*IMPACT_LINE_STRETCH+impact_line[0][0], (impact_line[1][1]-impact_line[0][1])*IMPACT_LINE_STRETCH+impact_line[0][1])
+                for line in block1.get_lines():
+                    if self._detect_crossover(line, impact_line):
+                        # print(node, self._normal_vector_for_impactor(impact_line, line))
+                        return node, self._normal_vector_for_impactor(impact_line, line)
+                return None
         return None
 
     def is_node_in_block(self, node:tuple, block:Block) -> bool:

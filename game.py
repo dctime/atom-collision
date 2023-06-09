@@ -3,16 +3,25 @@ from collision_director import CollisionDirector
 from color import Color
 import pygame
 
+class Actions():
+    CORE_MOVE_UP = "core_move_up"
+    CORE_MOVE_DOWN = "core_move_down"
+    CORE_MOVE_LEFT = "core_move_left"
+    CORE_MOVE_RIGHT = "core_move_right"
+
 class Game:
-    def __init__(self, pygame_screen, background: str = None) -> None:
+    def __init__(self, pygame_screen, time_between_frame:float, zero_vector:tuple, unit_size:int, background: str = None) -> None:
         self._players = []  # list of players(BlockMechanism)
         self._objects = []   # list of objects(like bullet)
         self._phase = "build"
         self._background = background
         self._screen = pygame_screen
         self._collision_director = CollisionDirector()
+        self._time_between_frame = time_between_frame
+        self._zero_vector = zero_vector
+        self._unit_size = unit_size
 
-    def run(self, zero_vector:tuple, unit_size:int, time_between_frame:float) -> None:
+    def run(self) -> None:
         # Call this in main loop
         clock = pygame.time.Clock()
         change_normalized_into_real = lambda zero_vector, unit_size, target_vector:(target_vector[0]*unit_size+zero_vector[0], target_vector[1]*unit_size+zero_vector[1])
@@ -33,42 +42,68 @@ class Game:
                 if event.type == pygame.QUIT:
                     running = False
 
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_w]:
+                print("W key pressed")
+                self.act(self._players[0], Actions.CORE_MOVE_UP)
+
+            if keys[pygame.K_s]:
+                print("S key pressed")
+                self.act(self._players[0], Actions.CORE_MOVE_DOWN)
+            
+            if keys[pygame.K_a]:
+                print("A key pressed")
+                self.act(self._players[0], Actions.CORE_MOVE_LEFT)
+
+            if keys[pygame.K_d]:
+                print("D key pressed")
+                self.act(self._players[0], Actions.CORE_MOVE_RIGHT)
+
+            if keys[pygame.K_UP]:
+                self.act(self._players[1], Actions.CORE_MOVE_UP)
+
+            if keys[pygame.K_DOWN]:
+                self.act(self._players[1], Actions.CORE_MOVE_DOWN)
+
+            if keys[pygame.K_LEFT]:
+                self.act(self._players[1], Actions.CORE_MOVE_LEFT)
+
+            if keys[pygame.K_RIGHT]:
+                self.act(self._players[1], Actions.CORE_MOVE_RIGHT)
+
+            
+
                     
             # collision stuff
             for index1 in range(len(self._players)-1):
                 for index2 in range(index1+1, len(self._players)):
-                    collision_report = self._collision_director.detect_and_effect_collision(self._players[index1], self._players[index2], time_between_frame)
+                    collision_report = self._collision_director.detect_and_effect_collision(self._players[index1], self._players[index2], self._time_between_frame)
                     if not (collision_report == None):
                         print(collision_report)
 
             # moving stuff
             for player in self._players:
-                player.move_by_physics(time_between_frame)
+                player.move_by_physics(self._time_between_frame)
             
             # render stuff
-            self.__draw(zero_vector, unit_size)
-
-            # game events
-            if game_time < 10:
-                self._players[0].add_force((30000, 0), (0, 3), time_between_frame)
-                self._players[1].add_force((-30000, 0), (0, -3), time_between_frame)
+            self.__draw(self._zero_vector, self._unit_size)
 
             # ======== DEBUGGING ==========
             # Draw debugging points on the screen
-            pygame.draw.circle(self._screen, Color.MID_SCREEN_COLOR, zero_vector, 3)
+            pygame.draw.circle(self._screen, Color.MID_SCREEN_COLOR, self._zero_vector, 3)
 
             # Draw center of mass of player1
-            pygame.draw.circle(self._screen, Color.CENTER_OF_MASS_COLOR, change_normalized_into_real(zero_vector, unit_size, self._players[0].get_center_of_mass_coor()), 3)
+            pygame.draw.circle(self._screen, Color.CENTER_OF_MASS_COLOR, change_normalized_into_real(self._zero_vector, self._unit_size, self._players[0].get_center_of_mass_coor()), 3)
             # Draw center of mass of player2
-            pygame.draw.circle(self._screen, Color.CENTER_OF_MASS_COLOR, change_normalized_into_real(zero_vector, unit_size, self._players[1].get_center_of_mass_coor()), 3)
+            pygame.draw.circle(self._screen, Color.CENTER_OF_MASS_COLOR, change_normalized_into_real(self._zero_vector, self._unit_size, self._players[1].get_center_of_mass_coor()), 3)
             # draw every blocks coor
             for _, block in self._players[0].get_blocks().items():
-                pygame.draw.circle(self._screen, Color.BLOCK_COOR_COLOR, change_normalized_into_real(zero_vector, unit_size, block.get_coor()), 2)
+                pygame.draw.circle(self._screen, Color.BLOCK_COOR_COLOR, change_normalized_into_real(self._zero_vector, self._unit_size, block.get_coor()), 2)
 
             
             # Update screen
             pygame.display.flip()
-            clock.tick(1/time_between_frame) # it doesnt not become super fast idk why
+            clock.tick(1/self._time_between_frame) # it doesnt not become super fast idk why
             game_time += 1
 
         # Quit Pygame
@@ -106,19 +141,19 @@ class Game:
             return False
         return True
 
-    def act(self, player:ControllableMechansim, action:str, time_between_frame:float) -> None:
+    def act(self, player:ControllableMechansim, action:str) -> None:
         # Apply action on the player
-        if action == "core_move_up":
-            player.core_move_up(time_between_frame)
+        if action == Actions.CORE_MOVE_UP:
+            player.core_move_up(self._time_between_frame)
 
-        elif action == "core_move_down":
-            player.core_move_down(time_between_frame)
+        elif action == Actions.CORE_MOVE_DOWN:
+            player.core_move_down(self._time_between_frame)
 
-        elif action == "core_move_left":
-            player.core_move_left(time_between_frame)
+        elif action == Actions.CORE_MOVE_LEFT:
+            player.core_move_left(self._time_between_frame)
         
-        elif action == "core_move_right":
-            player.core_move_right(time_between_frame)
+        elif action == Actions.CORE_MOVE_RIGHT:
+            player.core_move_right(self._time_between_frame)
 
     def __draw(self, zero_vector:tuple, unit_size:int) -> None:
         # Draw background, players and objects(follow the order)

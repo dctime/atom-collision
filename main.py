@@ -1,6 +1,6 @@
 import pygame
 from leaf_blocks import CoreBlock, StoneBlock, WoodBlock
-from block_mechanism import BlockMechanism
+from controllable_mechanism import ControllableMechansim
 import math
 from game import Game
 from color import Color
@@ -18,9 +18,9 @@ FRAMERATE = 500
 pygame.display.set_caption("My Pygame Screen")
 
 # set up the environment
-game = Game(screen)
-player1 = BlockMechanism(CoreBlock((0, 0)))
-player2 = BlockMechanism(CoreBlock((0, 0)))
+game = Game(screen, 1/FRAMERATE, MID_SCREEN_POINT, UNIT_SIZE)
+player1 = ControllableMechansim(CoreBlock((0, 0)))
+player2 = ControllableMechansim(CoreBlock((0, 0)))
 player1.add_block(WoodBlock((1, 0)))
 player1.add_block(StoneBlock((2, 0)))
 player1.add_block(StoneBlock((3, 0)))
@@ -32,5 +32,5 @@ game.add_players(player1, player2)
 player1.move_to((-5, 0))
 player2.move_to((5, 0))
 
-game.run(MID_SCREEN_POINT, UNIT_SIZE, 1/FRAMERATE)
+game.run()
 

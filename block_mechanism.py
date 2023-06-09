@@ -19,7 +19,7 @@ class BlockMechanism(BlockAssembly):
     def render(self, screen, zero_vector:tuple, unit_size:int, is_debugging=False, debug_color=(255, 0, 0)):
         super().render(screen, zero_vector, unit_size)
     
-    def add_force(self, force:tuple, location:tuple, time_between_frame:float, max_omega=2):
+    def add_force(self, force:tuple, location:tuple, time_between_frame:float, max_omega=1):
         '''
         WARN if the force or momentum of arm is to big the body will break
         '''
@@ -32,7 +32,7 @@ class BlockMechanism(BlockAssembly):
         force.append(0)
         tau = np.cross(np.array(momentum_arm).transpose(), np.array(force).transpose()).transpose()
         if max_omega-abs(self._angular_momentum/self._momentum_of_inertia)>0:
-            self._angular_momentum += tau[2]/100 * (max_omega-abs(self._angular_momentum/self._momentum_of_inertia)) / max_omega
+            self._angular_momentum += tau[2]/300 * (max_omega-abs(self._angular_momentum/self._momentum_of_inertia)) / max_omega
         else:
             self._angular_momentum = max_omega*self._momentum_of_inertia
 
@@ -82,7 +82,7 @@ class BlockMechanism(BlockAssembly):
 
     def __update_momentum_of_inertia(self) -> None:
         total_inertia = 0
-        inertia = lambda mass, distance_to_center:(1/6)*mass+mass*distance_to_center**2
+        inertia = lambda mass, distance_to_center:(1/6)*mass+mass*(distance_to_center**2)
         distance = lambda x, y: ((x[0]-y[0])**2 + (x[1]-y[1])**2)**(1/2)
         for _, block in self._blocks.items():
             total_inertia += inertia(block.get_mass(), distance(block.get_coor(), self.get_center_of_mass_coor()))

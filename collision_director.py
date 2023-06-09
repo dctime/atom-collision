@@ -147,7 +147,3 @@ class CollisionDirector():
         impluse = scalar*normal_vector
         return impluse
     
-# if __name__ == "__main__":
-#     director = CollisionDirector()
-#     test_tuples = ([0.3831967323152515, 0.736525937068662], [-0.08351638136233075, -0.14788283127399723]), ((-0.055232945952253275, -0.12299851137811744), (-0.0547465700639338, -0.12021249461175632))
-#     print(director._detect_crossover(test_tuples[0], test_tuples[1]))

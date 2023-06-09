@@ -53,7 +53,7 @@ class BlockMechanism(BlockAssembly):
         move stuff in a tick of time
         '''
         for _, block in self.get_blocks().items():
-            block.move((self._momentum[0]/self._mass*time_between_frame*100, self._momentum[1]/self._mass*time_between_frame*100))
+            block.move((self._momentum[0]/self._mass*time_between_frame, self._momentum[1]/self._mass*time_between_frame))
             self.__update_properties()
             block.rotate(self.get_center_of_mass_coor(), self._angular_momentum/self._momentum_of_inertia*time_between_frame)
             self.__update_properties()

@@ -6,15 +6,23 @@ import numpy as np
 class CollisionDirector():
     # TODO: only do force once
     # TODO: do force to block_mecha1 and block_mecha2
+    def detect_collision(self,block_mechanism_1:BlockMechanism, block_mechanism_2:BlockMechanism, time_between_frame:float):
+        return self.is_collide_with_force(block_mechanism_1, block_mechanism_2, time_between_frame)
+
     def is_collide_with_force(self,block_mechanism_1:BlockMechanism, block_mechanism_2:BlockMechanism, time_between_frame:float):
         for _, block1 in block_mechanism_1.get_blocks().items():
             for _, block2 in block_mechanism_2.get_blocks().items():
                 if not (self.block_collide_data(block1, block2) == None):
-                    # print("Col Director:", self.block_collide_data(block1, block2))
+                    print("Col Director:", self.block_collide_data(block1, block2))
                     effect_loc, normal_vector_block2= self.block_collide_data(block1, block2)
 
-                    impluse = self._cal_collision_impluse(block_mechanism_1.get_momentum(), block_mechanism_2.get_momentum(), block_mechanism_1.get_mass(), block_mechanism_2.get_mass(), normal_vector_block2, time_between_frame, 1)
+                    impluse = self._cal_collision_impluse(block_mechanism_1.get_momentum(), block_mechanism_2.get_momentum(), block_mechanism_1.get_mass(), block_mechanism_2.get_mass(), normal_vector_block2, time_between_frame, 1).transpose()
                     print("Col Director: impluse:", impluse)
+
+                    force_1 = (-impluse[0]/time_between_frame, -impluse[1]/time_between_frame)
+                    force_2 = (impluse[0]/time_between_frame, impluse[1]/time_between_frame)
+                    block_mechanism_1.add_force(force_1, effect_loc, time_between_frame)
+                    block_mechanism_2.add_force(force_2, effect_loc, time_between_frame)
 
                     return True
         return False
@@ -125,16 +133,18 @@ class CollisionDirector():
                 
         return line2_points_for_line1 and line1_points_for_line2
     
-    def _cal_collision_impluse(self, momentum1:tuple, momentum2:tuple, mass1:float, mass2:float, normal_vector:np.ndarray, time_between_frame:float, e:float) -> tuple:
+    def _cal_collision_impluse(self, momentum1:tuple, momentum2:tuple, mass1:float, mass2:float, normal_vector:np.ndarray, time_between_frame:float, e:float) -> np.ndarray:
         '''
-        e must be 0 - 1
+        e must be 0 to 1
         normal_vector is the back direction of the opponent's direction
         '''
         momentum1 = np.array(momentum1).transpose()
         momentum2 = np.array(momentum2).transpose()
         
-        scalar = ((1+e)*(np.dot(((momentum1*(1/mass1))-(momentum2*(1/mass2))), normal_vector)))/((1/mass1)+(1/mass2))/time_between_frame
-        return scalar
+        scalar = ((1+e)*(np.dot(((momentum1*(1/mass1))-(momentum2*(1/mass2))), normal_vector)))/((1/mass1)+(1/mass2))
+        print("Col dir: Scalar:", scalar)
+        impluse = scalar*normal_vector
+        return impluse
     
 # if __name__ == "__main__":
 #     director = CollisionDirector()

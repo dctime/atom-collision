@@ -12,13 +12,14 @@ class Game:
 
     def tick(self, zero_vector:tuple, unit_size:int, time_between_frame:float) -> None:
         # Call this in main loop
+        for index1 in range(len(self._players)-1):
+            for index2 in range(index1+1, len(self._players)):
+                if self._collision_director.detect_collision(self._players[index1], self._players[index2], time_between_frame):
+                    print("GAME: COLLIDE")
+
         for player in self._players:
             player.move_by_physics(time_between_frame)
         
-            for index1 in range(len(self._players)):
-                for index2 in range(index1+1, len(self._players)):
-                    if self._collision_director.is_collide_with_force(self._players[index1], self._players[index2], time_between_frame):
-                        print("GAME: COLLIDE")
                     
         self.__draw(zero_vector, unit_size)
         pass

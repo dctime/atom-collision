@@ -1,7 +1,5 @@
 import pygame
-from block import Block
 from leaf_blocks import CoreBlock, StoneBlock, WoodBlock
-from block_assembly import BlockAssembly
 from block_mechanism import BlockMechanism
 import math
 from game import Game

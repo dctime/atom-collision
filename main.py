@@ -77,6 +77,7 @@ while running:
     for _, block in player1.get_blocks().items():
         pygame.draw.circle(screen, Color.BLOCK_COOR_COLOR, change_normalized_into_real(MID_SCREEN_POINT, UNIT_SIZE, block.get_coor()), 2)
 
+    
     # Update screen
     pygame.display.flip()
     clock.tick(FRAMERATE) # it doesnt not become super fast idk why

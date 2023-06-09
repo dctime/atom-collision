@@ -52,6 +52,9 @@ class SkinBone:
     def get_nodes(self):
         return self.nodes
     
+    def get_lines(self):
+        return self.lines
+    
     def _gen_lines(self):
         self.lines = []
         if len(self.nodes) > 1:
@@ -100,7 +103,6 @@ class SkinBone:
             middle = lambda vector1, vector2: ((vector1[0] + vector2[0])/2, (vector1[1]+vector2[1])/2)
             if distance(node1, node2) > self.nodes_max_length:
                 self.nodes.insert(index+1, middle(node1, node2))
-                # print(f"NODES:{self.nodes}")
                 changed = True
                 break
             

@@ -1,6 +1,7 @@
 from block_mechanism import BlockMechanism
 from leaf_blocks import CoreBlock
 from block import Block
+import numpy as np
 
 class CollisionDirector():
     # TODO: do force to block_mecha1 and block_mecha2 
@@ -13,10 +14,15 @@ class CollisionDirector():
         return False
                 
     def is_block_collide(self, block1:Block, block2:Block) -> bool:
+        # block2's node in block1
         for node_index in range(len(block2.get_nodes())):
             if self.is_node_in_block(block2.get_nodes()[node_index], block1):
-                impact_line = ((tuple(block2.get_nodes()[node_index]), block2.get_previous_nodes()[node_index]))
-                print(impact_line)
+                node = tuple(block2.get_nodes()[node_index])
+                impact_line = [block2.get_previous_nodes()[node_index], tuple(block2.get_nodes()[node_index])]
+                impact_line[0] = ((impact_line[0][0]-impact_line[1][0])*100+impact_line[1][0], (impact_line[0][1]-impact_line[1][1])*100+impact_line[1][1])
+                for line in block1.get_lines():
+                    if self._detect_crossover(line, impact_line):
+                        print(node, self._normal_vector_for_impactor(impact_line, line))
                 return True
         return False
 
@@ -52,6 +58,16 @@ class CollisionDirector():
             
             return True
         
+    def _normal_vector_for_impactor(self, impact_line, hit_line) -> np.ndarray:
+        '''
+        hit line been hit by node
+        '''
+        v1 = np.array([impact_line[1][0]-impact_line[0][0], impact_line[1][1]-impact_line[1][0]]).transpose()
+        v2 = np.array([hit_line[1][0]-hit_line[0][0], hit_line[1][1]-hit_line[1][0]]).transpose()
+        vn = v1 - (np.dot(v1, v2)/np.dot(v2, v2))*v2
+        vn = -1*(vn/np.linalg.norm(vn))
+        return vn
+              
     def _detect_crossover(self, line1:tuple, line2:tuple) -> bool:
         '''
         line is made of two points ((x1, y1), (x2, y2))
@@ -96,3 +112,8 @@ class CollisionDirector():
                 line1_points_for_line2 = True
                 
         return line2_points_for_line1 and line1_points_for_line2
+    
+if __name__ == "__main__":
+    director = CollisionDirector()
+    test_tuples = ([0.3831967323152515, 0.736525937068662], [-0.08351638136233075, -0.14788283127399723]), ((-0.055232945952253275, -0.12299851137811744), (-0.0547465700639338, -0.12021249461175632))
+    print(director._detect_crossover(test_tuples[0], test_tuples[1]))

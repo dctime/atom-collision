@@ -6,13 +6,13 @@ class ControllableMechansim(BlockMechanism):
         super().__init__(core_block, momentum)
 
     def core_move_up(self, time_between_frame:float) -> None:
-        self.add_force((0, -1000), self.get_coor(), time_between_frame)
+        self.add_force((0, -3000), self.get_coor(), time_between_frame)
 
     def core_move_down(self, time_between_frame:float) -> None:
-        self.add_force((0, 1000), self.get_coor(), time_between_frame)
+        self.add_force((0, 3000), self.get_coor(), time_between_frame)
 
     def core_move_left(self, time_between_frame:float) -> None:
-        self.add_force((-1000, 0), self.get_coor(), time_between_frame)
+        self.add_force((-3000, 0), self.get_coor(), time_between_frame)
 
     def core_move_right(self, time_between_frame:float) -> None:
-        self.add_force((1000, 0), self.get_coor(), time_between_frame) 
+        self.add_force((3000, 0), self.get_coor(), time_between_frame) 

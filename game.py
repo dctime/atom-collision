@@ -44,19 +44,15 @@ class Game:
 
             keys = pygame.key.get_pressed()
             if keys[pygame.K_w]:
-                print("W key pressed")
                 self.act(self._players[0], Actions.CORE_MOVE_UP)
 
             if keys[pygame.K_s]:
-                print("S key pressed")
                 self.act(self._players[0], Actions.CORE_MOVE_DOWN)
             
             if keys[pygame.K_a]:
-                print("A key pressed")
                 self.act(self._players[0], Actions.CORE_MOVE_LEFT)
 
             if keys[pygame.K_d]:
-                print("D key pressed")
                 self.act(self._players[0], Actions.CORE_MOVE_RIGHT)
 
             if keys[pygame.K_UP]:

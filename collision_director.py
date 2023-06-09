@@ -16,7 +16,7 @@ class CollisionDirector():
                     # print("Col Director:", self.block_collide_data(block1, block2))
                     effect_loc, normal_vector_block2= self.block_collide_data(block1, block2)
 
-                    impluse = self._cal_collision_impluse(block_mechanism_1.get_momentum(), block_mechanism_2.get_momentum(), block_mechanism_1.get_mass(), block_mechanism_2.get_mass(), normal_vector_block2, time_between_frame, 1).transpose()
+                    impluse = self._cal_collision_impluse(block_mechanism_1.get_momentum(), block_mechanism_2.get_momentum(), block_mechanism_1.get_angular_momentum(), block_mechanism_2.get_angular_momentum(),block_mechanism_1.get_mass(), block_mechanism_2.get_mass(), normal_vector_block2, 1).transpose()
                     # print("Col Director: impluse:", impluse)
 
                     force_1 = (-impluse[0]/time_between_frame, -impluse[1]/time_between_frame)
@@ -98,8 +98,13 @@ class CollisionDirector():
         v1 = np.array([impact_line[1][0]-impact_line[0][0], impact_line[1][1]-impact_line[1][0]]).transpose()
         v2 = np.array([hit_line[1][0]-hit_line[0][0], hit_line[1][1]-hit_line[1][0]]).transpose()
         vn = v1 - (np.dot(v1, v2)/np.dot(v2, v2))*v2
-        vn = -1*(vn/np.linalg.norm(vn))
-        return vn
+        vn_length = np.linalg.norm(vn)
+
+        if vn_length == 0:
+            return 0
+        else:
+            vn = -1*(vn/vn_length)
+            return vn
               
     def _detect_crossover(self, line1:tuple, line2:tuple) -> bool:
         '''
@@ -146,7 +151,7 @@ class CollisionDirector():
                 
         return line2_points_for_line1 and line1_points_for_line2
     
-    def _cal_collision_impluse(self, momentum1:tuple, momentum2:tuple, mass1:float, mass2:float, normal_vector:np.ndarray, time_between_frame:float, e:float) -> np.ndarray:
+    def _cal_collision_impluse(self, momentum1:tuple, momentum2:tuple, angular_momentum1:float, angular_momentum2:float, mass1:float, mass2:float, normal_vector:np.ndarray, e:float) -> np.ndarray:
         '''
         e must be 0 to 1
         normal_vector is the back direction of the opponent's direction
@@ -155,6 +160,7 @@ class CollisionDirector():
         momentum2 = np.array(momentum2).transpose()
         
         scalar = ((1+e)*(np.dot(((momentum1*(1/mass1))-(momentum2*(1/mass2))), normal_vector)))/((1/mass1)+(1/mass2))
+        scalar += abs((1+e)*(((angular_momentum1*(1/mass1))-(angular_momentum2*(1/mass2)))))/((1/mass1)+(1/mass2))
         print("Col dir: Scalar:", scalar)
         impluse = scalar*normal_vector
         return impluse

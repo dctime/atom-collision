@@ -19,7 +19,7 @@ class BlockMechanism(BlockAssembly):
     def render(self, screen, zero_vector:tuple, unit_size:int, is_debugging=False, debug_color=(255, 0, 0)):
         super().render(screen, zero_vector, unit_size)
     
-    def add_force(self, force:tuple, location:tuple, time_between_frame:float, max_omega=1):
+    def add_force(self, force:tuple, location:tuple, time_between_frame:float, max_omega=0.5):
         '''
         WARN if the force or momentum of arm is to big the body will break
         '''
@@ -48,10 +48,13 @@ class BlockMechanism(BlockAssembly):
     def get_angular_momentum(self):
         return self._angular_momentum
     
-    def move_by_physics(self, time_between_frame:float) -> None:
+    def move_by_physics(self, time_between_frame:float, max_omega=0.5) -> None:
         '''
         move stuff in a tick of time
         '''
+        if max_omega-abs(self._angular_momentum/self._momentum_of_inertia)<0:
+            self._angular_momentum = max_omega*self._momentum_of_inertia
+
         for _, block in self.get_blocks().items():
             block.move((self._momentum[0]/self._mass*time_between_frame, self._momentum[1]/self._mass*time_between_frame))
             self.__update_properties()

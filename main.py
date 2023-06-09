@@ -30,14 +30,13 @@ running = True
 game = Game(screen)
 player1 = BlockMechanism(CoreBlock((0, 0)))
 player2 = BlockMechanism(CoreBlock((0, 0)))
-player1.add_block(WoodBlock((1, 0)))
-player1.add_block(StoneBlock((2, 0)))
-player1.add_block(StoneBlock((3, 0)))
-player1.add_block(StoneBlock((4, 0)))
-player2.add_block(WoodBlock((0, 1)))
-player2.add_block(StoneBlock((0, 2)))
-player2.add_block(StoneBlock((0, 3)))
-player2.add_block(StoneBlock((0, 4)))
+# player1.add_block(WoodBlock((1, 0)))
+# player1.add_block(StoneBlock((2, 0)))
+# player1.add_block(StoneBlock((3, 0)))
+# player1.add_block(StoneBlock((4, 0)))
+# player2.add_block(WoodBlock((0, 1)))
+# player2.add_block(StoneBlock((0, 2)))
+# player2.add_block(StoneBlock((0, 3)))
 game.add_players(player1, player2)
 player1.move_to((-5, 0))
 player2.move_to((5, 0))
@@ -60,9 +59,9 @@ while running:
     game.tick(MID_SCREEN_POINT, UNIT_SIZE, 1/FRAMERATE)
 
     # game events
-    if game_time < 20:
-        player1.add_force((-250, 0), (0, 20), 1/FRAMERATE)
-        player2.add_force((-250, 0), (0, 20), 1/FRAMERATE)
+    if game_time < 100:
+        player1.add_force((10, 0), (0, 1), 1/FRAMERATE)
+        player2.add_force((-10, 0), (0, 1), 1/FRAMERATE)
     # elif game_time >= 1000 and game_time <= 2000:
     #     player1.add_force((-12, 0), (0, 0), 1/FRAMERATE)
     #     player2.add_force((12, 0), (0, 0), 1/FRAMERATE)

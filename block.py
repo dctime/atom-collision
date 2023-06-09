@@ -14,6 +14,7 @@ class Block(SkinBone):
         self._mass = mass
         self._coor = center_point
         self._rotation = 0
+        self._previous_coor = ()
 
         points = [] # sequential, tuple in list
         points.append(
@@ -42,6 +43,9 @@ class Block(SkinBone):
     def heal_block(self, value):
         self._hp += value
 
+    def get_previous_coor(self):
+        return self._previous_coor
+
     def get_left_top(self) -> tuple:
         return self.get_nodes[0]
 
@@ -55,6 +59,7 @@ class Block(SkinBone):
         return self._mass
 
     def set_coor(self, coor) -> None:
+        self._previous_coor = copy.deepcopy(self.get_coor())
         self._coor = coor
 
     def move(self, dir_vector:tuple) -> None: 

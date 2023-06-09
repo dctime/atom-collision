@@ -9,7 +9,6 @@ class Game:
         self._background = background
         self._screen = pygame_screen
         self._collision_director = CollisionDirector()
-        self._tick_counter = 0
 
     def tick(self, zero_vector:tuple, unit_size:int, time_between_frame:float) -> None:
         # Call this in main loop
@@ -22,7 +21,6 @@ class Game:
                         print("GAME: COLLIDE")
                     
         self.__draw(zero_vector, unit_size)
-        self._tick_counter += 1
         pass
     
     def add_players(self, player1:BlockMechanism, player2:BlockMechanism):

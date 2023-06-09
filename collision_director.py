@@ -4,18 +4,18 @@ from block import Block
 import numpy as np
 
 class CollisionDirector():
+    # TODO: only do force once
     # TODO: do force to block_mecha1 and block_mecha2
     def is_collide_with_force(self,block_mechanism_1:BlockMechanism, block_mechanism_2:BlockMechanism, time_between_frame:float):
         for _, block1 in block_mechanism_1.get_blocks().items():
             for _, block2 in block_mechanism_2.get_blocks().items():
                 if not (self.block_collide_data(block1, block2) == None):
-                    print("Col Director:", self.block_collide_data(block1, block2))
+                    # print("Col Director:", self.block_collide_data(block1, block2))
                     effect_loc, normal_vector_block2= self.block_collide_data(block1, block2)
-                    force_block2 = self._cal_collision_force(block_mechanism_1.get_momentum(), block_mechanism_2.get_momentum(), block_mechanism_1.get_mass(), block_mechanism_2.get_mass(), normal_vector_block2, time_between_frame, 1)
-                    print("Col Director: force:", force_block2)
-                    block_mechanism_2.add_force(force_block2, effect_loc, time_between_frame)
-                    force_block1 = (-force_block2[0], -force_block2[1])
-                    block_mechanism_1.add_force(force_block1, effect_loc, time_between_frame)
+
+                    impluse = self._cal_collision_impluse(block_mechanism_1.get_momentum(), block_mechanism_2.get_momentum(), block_mechanism_1.get_mass(), block_mechanism_2.get_mass(), normal_vector_block2, time_between_frame, 1)
+                    print("Col Director: impluse:", impluse)
+
                     return True
         return False
                 
@@ -125,19 +125,18 @@ class CollisionDirector():
                 
         return line2_points_for_line1 and line1_points_for_line2
     
-    def _cal_collision_force(self, momentum1:tuple, momentum2:tuple, mass1:float, mass2:float, normal_vector:np.ndarray, time_between_frame:float, e:float) -> tuple:
+    def _cal_collision_impluse(self, momentum1:tuple, momentum2:tuple, mass1:float, mass2:float, normal_vector:np.ndarray, time_between_frame:float, e:float) -> tuple:
         '''
         e must be 0 - 1
         normal_vector is the back direction of the opponent's direction
         '''
         momentum1 = np.array(momentum1).transpose()
         momentum2 = np.array(momentum2).transpose()
-        scalar = ((1+e)*(np.dot(((momentum1*(1/mass1))-(momentum2*(1/mass2))), normal_vector)))/((1/mass1)+(1/mass2))*time_between_frame
-        force = (scalar*normal_vector).transpose()
-        force = ((force[0], force[1]))*350000
-        return force
+        
+        scalar = ((1+e)*(np.dot(((momentum1*(1/mass1))-(momentum2*(1/mass2))), normal_vector)))/((1/mass1)+(1/mass2))/time_between_frame
+        return scalar
     
-if __name__ == "__main__":
-    director = CollisionDirector()
-    test_tuples = ([0.3831967323152515, 0.736525937068662], [-0.08351638136233075, -0.14788283127399723]), ((-0.055232945952253275, -0.12299851137811744), (-0.0547465700639338, -0.12021249461175632))
-    print(director._detect_crossover(test_tuples[0], test_tuples[1]))
+# if __name__ == "__main__":
+#     director = CollisionDirector()
+#     test_tuples = ([0.3831967323152515, 0.736525937068662], [-0.08351638136233075, -0.14788283127399723]), ((-0.055232945952253275, -0.12299851137811744), (-0.0547465700639338, -0.12021249461175632))
+#     print(director._detect_crossover(test_tuples[0], test_tuples[1]))

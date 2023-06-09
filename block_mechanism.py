@@ -39,6 +39,9 @@ class BlockMechanism(BlockAssembly):
     def get_center_of_mass_coor(self):
         return self._center_of_mass_coor
     
+    def get_mass(self):
+        return self._mass
+    
     def get_momentum(self):
         return self._momentum
     

@@ -4,27 +4,39 @@ from block import Block
 import numpy as np
 
 class CollisionDirector():
-    # TODO: do force to block_mecha1 and block_mecha2 
-    def is_collide(self,block_mechanism_1:BlockMechanism, block_mechanism_2:BlockMechanism):
+    # TODO: do force to block_mecha1 and block_mecha2
+    def is_collide_with_force(self,block_mechanism_1:BlockMechanism, block_mechanism_2:BlockMechanism, time_between_frame:float):
         for _, block1 in block_mechanism_1.get_blocks().items():
             for _, block2 in block_mechanism_2.get_blocks().items():
-                if self.is_block_collide(block1, block2):
-                    # print(block1, block2)
+                if not (self.block_collide_data(block1, block2) == None):
+                    print("Col Director:", self.block_collide_data(block1, block2))
+                    effect_loc, normal_vector_block2= self.block_collide_data(block1, block2)
+                    force_block2 = self._cal_collision_force(block_mechanism_1.get_momentum(), block_mechanism_2.get_momentum(), block_mechanism_1.get_mass(), block_mechanism_2.get_mass(), normal_vector_block2, time_between_frame, 1)
+                    print("Col Director: force:", force_block2)
+                    block_mechanism_2.add_force(force_block2, effect_loc, time_between_frame)
+                    force_block1 = (-force_block2[0], -force_block2[1])
+                    block_mechanism_1.add_force(force_block1, effect_loc, time_between_frame)
                     return True
         return False
                 
-    def is_block_collide(self, block1:Block, block2:Block) -> bool:
+    def block_collide_data(self, block1:Block, block2:Block) -> tuple:
+        '''
+        return node:tuple, normal_vector, the direction of force of block2:np.ndarray
+        if doesnt collide, returns None
+        '''
         # block2's node in block1
         for node_index in range(len(block2.get_nodes())):
             if self.is_node_in_block(block2.get_nodes()[node_index], block1):
                 node = tuple(block2.get_nodes()[node_index])
                 impact_line = [block2.get_previous_nodes()[node_index], tuple(block2.get_nodes()[node_index])]
-                impact_line[0] = ((impact_line[0][0]-impact_line[1][0])*100+impact_line[1][0], (impact_line[0][1]-impact_line[1][1])*100+impact_line[1][1])
+                impact_line[0] = ((impact_line[0][0]-impact_line[1][0])*30+impact_line[1][0], (impact_line[0][1]-impact_line[1][1])*30+impact_line[1][1])
+                impact_line[1] = ((impact_line[1][0]-impact_line[0][0])*100+impact_line[0][0], (impact_line[1][1]-impact_line[0][1])*100+impact_line[0][1])
                 for line in block1.get_lines():
                     if self._detect_crossover(line, impact_line):
-                        print(node, self._normal_vector_for_impactor(impact_line, line))
-                return True
-        return False
+                        # print(node, self._normal_vector_for_impactor(impact_line, line))
+                        return node, self._normal_vector_for_impactor(impact_line, line)
+                return None
+        return None
 
     def is_node_in_block(self, node:tuple, block:Block) -> bool:
         '''
@@ -112,6 +124,18 @@ class CollisionDirector():
                 line1_points_for_line2 = True
                 
         return line2_points_for_line1 and line1_points_for_line2
+    
+    def _cal_collision_force(self, momentum1:tuple, momentum2:tuple, mass1:float, mass2:float, normal_vector:np.ndarray, time_between_frame:float, e:float) -> tuple:
+        '''
+        e must be 0 - 1
+        normal_vector is the back direction of the opponent's direction
+        '''
+        momentum1 = np.array(momentum1).transpose()
+        momentum2 = np.array(momentum2).transpose()
+        scalar = ((1+e)*(np.dot(((momentum1*(1/mass1))-(momentum2*(1/mass2))), normal_vector)))/((1/mass1)+(1/mass2))*time_between_frame
+        force = (scalar*normal_vector).transpose()
+        force = ((force[0], force[1]))*350000
+        return force
     
 if __name__ == "__main__":
     director = CollisionDirector()

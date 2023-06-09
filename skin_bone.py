@@ -1,4 +1,5 @@
 import pygame
+import copy
 
 class SkinBone:
     def __init__(self, nodes_max_length=10):
@@ -12,6 +13,7 @@ class SkinBone:
         self.lines
         example: [((1, 2), (1, 3)), ((1, 3), (2, 3)), ((2, 3), (1, 2))]
         '''
+        self._previous_nodes = []
         self.nodes = []
         self.lines = []
         self.nodes_max_length = nodes_max_length
@@ -30,6 +32,7 @@ class SkinBone:
         '''
         example: [(1, 2), (1, 3), (2, 3)]
         '''
+        self._previous_nodes = copy.deepcopy(self.nodes)
         self.nodes = nodes
         self._gen_lines()
         if fill_nodes:
@@ -41,7 +44,10 @@ class SkinBone:
         if self.is_crossover():
             print("CROSSOVER!!!!")
             self.nodes.remove(node)
-            self._gen_lines()   
+            self._gen_lines()
+
+    def get_previous_nodes(self):
+        return self._previous_nodes
         
     def get_nodes(self):
         return self.nodes
@@ -102,6 +108,9 @@ class SkinBone:
             self.fill_nodes()
                   
     def _detect_crossover(self, line1:tuple, line2:tuple) -> bool:
+        '''
+        line is made of two points ((x1, y1), (x2, y2))
+        '''
         # ax + by = c
         # y - y0 = m(x - x0)
         # (y-y0) = mx - mx0

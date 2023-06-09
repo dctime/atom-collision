@@ -59,18 +59,9 @@ while running:
     game.tick(MID_SCREEN_POINT, UNIT_SIZE, 1/FRAMERATE)
 
     # game events
-    if game_time < 100:
-        player1.add_force((10000, 0), (0, 1), 1/FRAMERATE)
-        player2.add_force((-10000, 0), (0, 1), 1/FRAMERATE)
-    # elif game_time >= 1000 and game_time <= 2000:
-    #     player1.add_force((-12, 0), (0, 0), 1/FRAMERATE)
-    #     player2.add_force((12, 0), (0, 0), 1/FRAMERATE)
-    # elif game_time >= 5000 and game_time <= 5500:
-    #     player1.add_force((0, -5), (0, 0), 1/FRAMERATE)
-    #     player2.add_force((0, 5), (0, 0), 1/FRAMERATE)
-    # elif game_time >= 5500 and game_time <= 6000:
-    #     player1.add_force((10, 15), (0, 0), 1/FRAMERATE)
-    #     player2.add_force((-10, -15), (0, 0), 1/FRAMERATE)
+    if game_time < 10:
+        player1.add_force((30000, 0), (0, 3), 1/FRAMERATE)
+        player2.add_force((-30000, 0), (0, 3), 1/FRAMERATE)
 
     # Draw debugging points on the screen
     pygame.draw.circle(screen, Color.MID_SCREEN_COLOR, MID_SCREEN_POINT, 3)

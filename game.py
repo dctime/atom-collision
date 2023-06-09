@@ -14,8 +14,9 @@ class Game:
         # Call this in main loop
         for index1 in range(len(self._players)-1):
             for index2 in range(index1+1, len(self._players)):
-                if self._collision_director.detect_collision(self._players[index1], self._players[index2], time_between_frame):
-                    print("GAME: COLLIDE")
+                collision_report = self._collision_director.detect_and_effect_collision(self._players[index1], self._players[index2], time_between_frame)
+                if not (collision_report == None):
+                    print(collision_report)
 
         for player in self._players:
             player.move_by_physics(time_between_frame)

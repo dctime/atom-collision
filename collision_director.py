@@ -4,28 +4,28 @@ from block import Block
 import numpy as np
 
 class CollisionDirector():
-    # TODO: only do force once
-    # TODO: do force to block_mecha1 and block_mecha2
-    def detect_collision(self,block_mechanism_1:BlockMechanism, block_mechanism_2:BlockMechanism, time_between_frame:float):
-        return self.is_collide_with_force(block_mechanism_1, block_mechanism_2, time_between_frame)
-
-    def is_collide_with_force(self,block_mechanism_1:BlockMechanism, block_mechanism_2:BlockMechanism, time_between_frame:float):
+    def detect_and_effect_collision(self,block_mechanism_1:BlockMechanism, block_mechanism_2:BlockMechanism, time_between_frame:float):
+        '''
+        if there is collision, return (block1, block2)
+        block1 from mecha1, block2 from mecha2
+        else return None
+        '''
         for _, block1 in block_mechanism_1.get_blocks().items():
             for _, block2 in block_mechanism_2.get_blocks().items():
                 if not (self.block_collide_data(block1, block2) == None):
-                    print("Col Director:", self.block_collide_data(block1, block2))
+                    # print("Col Director:", self.block_collide_data(block1, block2))
                     effect_loc, normal_vector_block2= self.block_collide_data(block1, block2)
 
                     impluse = self._cal_collision_impluse(block_mechanism_1.get_momentum(), block_mechanism_2.get_momentum(), block_mechanism_1.get_mass(), block_mechanism_2.get_mass(), normal_vector_block2, time_between_frame, 1).transpose()
-                    print("Col Director: impluse:", impluse)
+                    # print("Col Director: impluse:", impluse)
 
                     force_1 = (-impluse[0]/time_between_frame, -impluse[1]/time_between_frame)
                     force_2 = (impluse[0]/time_between_frame, impluse[1]/time_between_frame)
                     block_mechanism_1.add_force(force_1, effect_loc, time_between_frame)
                     block_mechanism_2.add_force(force_2, effect_loc, time_between_frame)
 
-                    return True
-        return False
+                    return (block1, block2)
+        return None
                 
     def block_collide_data(self, block1:Block, block2:Block) -> tuple:
         '''
@@ -33,12 +33,13 @@ class CollisionDirector():
         if doesnt collide, returns None
         '''
         # block2's node in block1
+        IMPACT_LINE_STRETCH = 10
         for node_index in range(len(block2.get_nodes())):
             if self.is_node_in_block(block2.get_nodes()[node_index], block1):
                 node = tuple(block2.get_nodes()[node_index])
                 impact_line = [block2.get_previous_nodes()[node_index], tuple(block2.get_nodes()[node_index])]
-                impact_line[0] = ((impact_line[0][0]-impact_line[1][0])*30+impact_line[1][0], (impact_line[0][1]-impact_line[1][1])*30+impact_line[1][1])
-                impact_line[1] = ((impact_line[1][0]-impact_line[0][0])*100+impact_line[0][0], (impact_line[1][1]-impact_line[0][1])*100+impact_line[0][1])
+                impact_line[0] = ((impact_line[0][0]-impact_line[1][0])*IMPACT_LINE_STRETCH+impact_line[1][0], (impact_line[0][1]-impact_line[1][1])*IMPACT_LINE_STRETCH+impact_line[1][1])
+                impact_line[1] = ((impact_line[1][0]-impact_line[0][0])*IMPACT_LINE_STRETCH+impact_line[0][0], (impact_line[1][1]-impact_line[0][1])*IMPACT_LINE_STRETCH+impact_line[0][1])
                 for line in block1.get_lines():
                     if self._detect_crossover(line, impact_line):
                         # print(node, self._normal_vector_for_impactor(impact_line, line))

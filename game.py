@@ -34,9 +34,36 @@ class Game:
         alive1 = self.get_player(0)._core._visible
         alive2 = self.get_player(1)._core._visible
         return (alive1,alive2)
-    
+    def run_build(self)->None:
+        pass
+    def run_battle(self,collision_delay,COLLISION_DELAY_MAX)->None:
+        # force stuff
+        for player in self._players:
+            self._gravity_director.add_gravity(player)
+
+        # collision stuff
+        if collision_delay == 0:
+            collision_delay = COLLISION_DELAY_MAX
+            for index1 in range(len(self._players)-1):
+                for index2 in range(index1+1, len(self._players)):
+                    collision_report = self._collision_director.detect_and_effect_collision(self._players[index1], self._players[index2], self._time_between_frame)
+                    if not (collision_report == None):
+                        self.__collision_events(collision_report)
+        
+        
+        self.__key_events()
+
+        # moving stuff
+        for player in self._players:
+            player.move_by_physics(self._time_between_frame)
+
+    def run_end(self)->None:
+        pass
     def run(self) -> None:
         # Call this in main loop
+        collision_delay = 10
+        COLLISION_DELAY_MAX = 10
+
         clock = pygame.time.Clock()
         change_normalized_into_real = lambda zero_vector, unit_size, target_vector:(target_vector[0]*unit_size+zero_vector[0], target_vector[1]*unit_size+zero_vector[1])
         mixer.music.set_volume(0.7)
@@ -45,8 +72,6 @@ class Game:
         
         running = True
         game_time = 0
-        collision_delay = 10
-        COLLISION_DELAY_MAX = 10
 
         while running:
             # shut down the game
@@ -57,28 +82,16 @@ class Game:
             # #print("Main: GAME TIME:", game_time)
             # set up the background
             self._screen.fill((0, 0, 0))
-
-            # force stuff
-            for player in self._players:
-                self._gravity_director.add_gravity(player)
-
-            # collision stuff
-            if collision_delay:
-                collision_delay -= 1
-            else:
-                collision_delay = COLLISION_DELAY_MAX
-                for index1 in range(len(self._players)-1):
-                    for index2 in range(index1+1, len(self._players)):
-                        collision_report = self._collision_director.detect_and_effect_collision(self._players[index1], self._players[index2], self._time_between_frame)
-                        if not (collision_report == None):
-                            self.__collision_events(collision_report)
             
-            
-            self.__key_events()
+            if self.get_phase()=="build":
+                self.run_build()
+            elif self.get_phase()=="battle":
+                self.run_battle(collision_delay,COLLISION_DELAY_MAX)
+                if collision_delay:
+                    collision_delay -= 1
 
-            # moving stuff
-            for player in self._players:
-                player.move_by_physics(self._time_between_frame)
+            elif self.get_phase()=="end":
+                self.run_end()
             
             # render stuff
             self.__draw(self._zero_vector, self._unit_size)
@@ -103,15 +116,9 @@ class Game:
 
             # Check if the game is end
             alive=self.alive()
-            if not (alive[0] or alive[1]):
-                #print("Draw")
-                break
-            if not alive[0]:
-                #print("Player 2 is winner.")
-                break
-            if not alive[1]:
-                #print("Player 1 is winner.")
-                break
+            if not (alive[0] and alive[1]):
+                self.set_phase("end")
+
         # Quit Pygame
         pygame.quit()
     

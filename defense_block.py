@@ -70,6 +70,7 @@ class DefenseBlock(Block):
     def damage_block(self, value):
         super().damage_block(value)
         self.set_status()
+        self.set_color()
 
     def break_animation(self):
         raise NotImplementedError

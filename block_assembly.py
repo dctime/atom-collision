@@ -34,7 +34,10 @@ class BlockAssembly():
         if block == self._core:
             return True
         visited[block]=True
-        coor = block.get_coor()
+        coor = None
+        for ci,bi in self.get_blocks().items():
+            if bi==block:
+                coor=ci
         neighbors = self.get_neighbors(coor)
         for ni in neighbors:
             if ni==None or visited.get(ni):
@@ -60,6 +63,7 @@ class BlockAssembly():
         self._block_neighbor[block] = []
 
         neighbors = self.get_neighbors(coor)
+        print(neighbors)
         for neighbor in neighbors:
             if neighbor != None:
                 self._block_neighbor[neighbor].append(block)
@@ -127,4 +131,4 @@ if __name__ == "__main__":
     coor = (100, 100)
     core = lb.CoreBlock(coor)
     game = None
-    plr = BlockAssembly(game, core, 4.8763)
+    plr = BlockAssembly(game, core)

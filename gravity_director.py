@@ -12,7 +12,7 @@ class GravityDirector():
         player_loc = player.get_center_of_mass_coor()
         relative_loc = ((player_loc[0]-self.__loc[0]), (player_loc[1]-self.__loc[1]))
         distance = (relative_loc[0]**2+relative_loc[1]**2)**(1/2)
-        print("distance", distance)
+        #print("distance", distance)
 
         if distance == 0:
             force = (0, 0)

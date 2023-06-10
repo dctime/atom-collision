@@ -34,7 +34,7 @@ class Game:
         self._zero_vector = zero_vector
         self._unit_size = unit_size
         self._running = True
-        self._gravity_particle_effect = GravityParticleEffect(pygame_screen, max(pygame_screen.get_size()[0], pygame_screen.get_size()[1]), (0, 0), 3)
+        self._gravity_particle_effect = GravityParticleEffect(max(pygame_screen.get_size()[0], pygame_screen.get_size()[1]), (0, 0), 3)
         
     def alive(self)->tuple:
         alive1 = self.get_player(0)._core._visible
@@ -71,7 +71,7 @@ class Game:
             player.move_by_physics(self._time_between_frame)
 
         # particle stuff
-        self._gravity_particle_effect.render(self._zero_vector, self._unit_size)
+        self._gravity_particle_effect.render(self._screen, self._zero_vector, self._unit_size)
         
         # Check if the game is end
         alive=self.alive()

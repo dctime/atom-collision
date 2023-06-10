@@ -54,7 +54,7 @@ class Game:
                 if event.type == pygame.QUIT:
                     running = False
 
-            # print("Main: GAME TIME:", game_time)
+            # #print("Main: GAME TIME:", game_time)
             # set up the background
             self._screen.fill((0, 0, 0))
 
@@ -104,13 +104,13 @@ class Game:
             # Check if the game is end
             alive=self.alive()
             if not (alive[0] or alive[1]):
-                print("Draw")
+                #print("Draw")
                 break
             if not alive[0]:
-                print("Player 2 is winner.")
+                #print("Player 2 is winner.")
                 break
             if not alive[1]:
-                print("Player 1 is winner.")
+                #print("Player 1 is winner.")
                 break
         # Quit Pygame
         pygame.quit()

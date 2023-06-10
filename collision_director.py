@@ -33,7 +33,7 @@ class CollisionDirector():
                     val = (val1+val2)/100
                     block1.damage_block(val)
                     block2.damage_block(val)
-                    print("damage: ",val)
+                    #print("damage: ",val)
 
                     # Remove destroyed blocks
                     if block1.get_status()==0:
@@ -60,7 +60,7 @@ class CollisionDirector():
                 impact_line[1] = ((impact_line[1][0]-impact_line[0][0])*IMPACT_LINE_STRETCH+impact_line[0][0], (impact_line[1][1]-impact_line[0][1])*IMPACT_LINE_STRETCH+impact_line[0][1])
                 for line in block1.get_lines():
                     if self._detect_crossover(line, impact_line):
-                        # print(node, self._normal_vector_for_impactor(impact_line, line))
+                        # #print(node, self._normal_vector_for_impactor(impact_line, line))
                         return node, self._normal_vector_for_impactor(impact_line, line)
                 return None
         return None
@@ -121,8 +121,8 @@ class CollisionDirector():
         # (y-y0) = mx - mx0
         # y-y0-mx = -mx0
         # y - mx = y0 - mx0
-        # print(f"line1:{line1}")
-        # print(f"line2:{line2}")
+        # #print(f"line1:{line1}")
+        # #print(f"line2:{line2}")
         line2_points_for_line1 = False
         try:
             m1 = (line1[1][1]-line1[0][1])/(line1[1][0]-line1[0][0])
@@ -131,12 +131,12 @@ class CollisionDirector():
             
             if not ((line1_equation(line2[0][0], line2[0][1]) > answer_if_on_line1 and line1_equation(line2[1][0], line2[1][1]) > answer_if_on_line1) or\
                 (line1_equation(line2[0][0], line2[0][1]) < answer_if_on_line1 and line1_equation(line2[1][0], line2[1][1]) < answer_if_on_line1)):
-                # print("CROSSOVER")
+                # #print("CROSSOVER")
                 line2_points_for_line1 = True
         except: # ZeroDivisionError:
             x = line1[0][0]
             if not ((line2[0][0] > x and line2[1][0] > x) or (line2[0][0] < x and line2[1][0] < x)):
-                # print("CROSSOVER")
+                # #print("CROSSOVER")
                 line2_points_for_line1 = True
                 
         line1_points_for_line2 = False
@@ -147,12 +147,12 @@ class CollisionDirector():
             
             if not ((line2_equation(line1[0][0], line1[0][1]) > answer_if_on_line2 and line2_equation(line1[1][0], line1[1][1]) > answer_if_on_line2) or\
                 (line2_equation(line1[0][0], line1[0][1]) < answer_if_on_line2 and line2_equation(line1[1][0], line1[1][1]) < answer_if_on_line2)):
-                # print("CROSSOVER")
+                # #print("CROSSOVER")
                 line1_points_for_line2 = True
         except: # ZeroDivisionError:
             x = line2[0][0]
             if not ((line1[0][0] > x and line1[1][0] > x) or (line1[0][0] < x and line1[1][0] < x)):
-                # print("CROSSOVER")
+                # #print("CROSSOVER")
                 line1_points_for_line2 = True
                 
         return line2_points_for_line1 and line1_points_for_line2
@@ -168,7 +168,7 @@ class CollisionDirector():
         
         scalar = ((1+e)*np.dot(((momentum1*(1/mass1))-(momentum2*(1/mass2))), normal_vector))/((1/mass1)+(1/mass2))
         scalar += abs((1+e)*(((angular_momentum1*(1/mass1))-(angular_momentum2*(1/mass2)))))/((1/mass1)+(1/mass2))
-        print("Col dir: Scalar:", scalar)
+        #print("Col dir: Scalar:", scalar)
         if np.linalg.norm(scalar) < SCALAR_MIN:
             if np.linalg.norm(scalar) == 0:
                 scalar = scalar*SCALAR_MIN

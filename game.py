@@ -75,9 +75,6 @@ class Game:
 
         clock = pygame.time.Clock()
         change_normalized_into_real = lambda zero_vector, unit_size, target_vector:(target_vector[0]*unit_size+zero_vector[0], target_vector[1]*unit_size+zero_vector[1])
-        mixer.music.set_volume(0.7)
-        # Create screen
-        # screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         
         game_time = 0
 

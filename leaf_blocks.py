@@ -5,7 +5,7 @@ from color import Color
 
 class WoodBlock(DefenseBlock):
     def __init__(self, center_point: tuple, arm=None, visible=True, status=4):
-        self._max_hp = 50
+        self._max_hp = 100
         self._mass = 15
         self._init_color = (133, 94, 66)
         texture = "wood"
@@ -28,7 +28,7 @@ class StoneBlock(DefenseBlock):
 class CoreBlock(DefenseBlock):
     def __init__(self, center_point: tuple, visible: bool = True, status: int = 4):
         center_point = center_point
-        hp = 100
+        hp = 500
         color = Color.CORE_COLOR
         mass = 200
         arm = None

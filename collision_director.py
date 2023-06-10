@@ -29,9 +29,9 @@ class CollisionDirector():
                     block_mechanism_2.add_force(force_2, effect_loc, time_between_frame)
                     
                     # Damage block
-                    val1=math.sqrt(block_mechanism_1._momentum[0]**10 + block_mechanism_1._momentum[1]**10)
-                    val2=math.sqrt(block_mechanism_2._momentum[0]**10 + block_mechanism_2._momentum[1]**10)
-                    val = (val1+val2)/100000000000000000
+                    val1=math.sqrt(block_mechanism_1._momentum[0]**2 + block_mechanism_1._momentum[1]**2)
+                    val2=math.sqrt(block_mechanism_2._momentum[0]**2 + block_mechanism_2._momentum[1]**2)
+                    val = (val1+val2)/1000
                     block1.damage_block(val)
                     block2.damage_block(val)
                     #print("damage: ",val)
@@ -52,7 +52,7 @@ class CollisionDirector():
         if doesnt collide, returns None
         '''
         # block2's node in block1
-        IMPACT_LINE_STRETCH = 10
+        IMPACT_LINE_STRETCH = 100
         for node_index in range(len(block2.get_nodes())):
             if self.is_node_in_block(block2.get_nodes()[node_index], block1):
                 node = tuple(block2.get_nodes()[node_index])
@@ -169,7 +169,7 @@ class CollisionDirector():
         e must be 0 to 1
         normal_vector is the back direction of the opponent's direction
         '''
-        SCALAR_MIN = 300
+        SCALAR_MIN = 1000
         momentum1 = np.array(momentum1).transpose()
         momentum2 = np.array(momentum2).transpose()
         

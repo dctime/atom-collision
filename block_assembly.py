@@ -20,6 +20,29 @@ class BlockAssembly():
         self._block_neighbor = {}
         self.add_block(core_block, core=True)
 
+    def remove_block(self,block)->None:
+        # Remove the block
+        self._blocks = {ci:bi for ci,bi in self._blocks.items() if bi != block}
+
+        # Remove invalid blocks
+        self._blocks = {ci:bi for ci,bi in self._blocks.items() if self.is_valid(bi,{})}
+
+    def is_valid(self,block:DefenseBlock, visited:dict)->bool:
+        """
+        Check if a block has a path to core
+        """
+        if block == self._core:
+            return True
+        visited[block]=True
+        coor = block.get_coor()
+        neighbors = self.get_neighbors(coor)
+        for ni in neighbors:
+            if ni==None or visited.get(ni):
+                continue
+            if self.is_valid(ni,visited):
+                return True
+        return False
+
     def render(self, screen, zero_vector:tuple, unit_size:int):
         for coordinate, block in self._blocks.items():
             block.render(screen, zero_vector, unit_size)

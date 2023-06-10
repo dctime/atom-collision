@@ -35,6 +35,13 @@ class CollisionDirector():
                     block2.damage_block(val)
                     print("damage: ",val)
 
+                    # Remove destroyed blocks
+                    if block1.get_status()==0:
+                        block_mechanism_1.remove_block(block1)
+
+                    if block2.get_status()==0:
+                        block_mechanism_2.remove_block(block1)
+
                     return (block1, block2)
         return None
                 

@@ -23,6 +23,9 @@ class BlockAssembly():
     def remove_block(self,block)->None:
         # Remove the block
         self._blocks = {ci:bi for ci,bi in self._blocks.items() if bi != block}
+        for ni in self._block_neighbor[block]:
+            self._block_neighbor[ni].remove(block)
+        self._block_neighbor={bi:nbs for bi,nbs in self._block_neighbor.items() if bi != block}
 
         # Remove invalid blocks
         self._blocks = {ci:bi for ci,bi in self._blocks.items() if self.is_valid(bi,{})}
@@ -34,11 +37,8 @@ class BlockAssembly():
         if block == self._core:
             return True
         visited[block]=True
-        coor = None
-        for ci,bi in self.get_blocks().items():
-            if bi==block:
-                coor=ci
-        neighbors = self.get_neighbors(coor)
+
+        neighbors = self.get_neighbors_block(block)
         for ni in neighbors:
             if ni==None or visited.get(ni):
                 continue
@@ -63,7 +63,6 @@ class BlockAssembly():
         self._block_neighbor[block] = []
 
         neighbors = self.get_neighbors(coor)
-        print(neighbors)
         for neighbor in neighbors:
             if neighbor != None:
                 self._block_neighbor[neighbor].append(block)
@@ -92,6 +91,9 @@ class BlockAssembly():
                 return True
         return False
 
+    def get_neighbors_block(self,block)->list:
+        return self._block_neighbor[block]
+    
     def get_neighbors(self, coor: tuple) -> list:
         # return neighbors at coor(including None)
         x = coor[0]

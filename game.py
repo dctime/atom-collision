@@ -8,7 +8,9 @@ from particle_effect import GravityParticleEffect
 import pygame
 import random
 
-
+WIDTH = 1200
+HEIGHT = 800
+CENTER = (WIDTH//2, HEIGHT//2)
 
 class Actions():
     CORE_MOVE_UP = "core_move_up"
@@ -35,6 +37,7 @@ class Game:
         self._unit_size = unit_size
         self._running = True
         self._gravity_particle_effect = GravityParticleEffect(max(pygame_screen.get_size()[0], pygame_screen.get_size()[1]), (0, 0), 3)
+        self._origin_hp = []
         
     def alive(self)->tuple:
         alive1 = self.get_player(0)._core._visible
@@ -82,7 +85,49 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                     self._running = False
-        pass
+        
+        # Calculate score
+        hp1 = self.get_player(0).total_hp()
+        hp2 = self.get_player(1).total_hp()
+        score1 = int(hp1 + (self._origin_hp[1]-hp2))
+        score2 = int(hp2 + (self._origin_hp[0]-hp1))
+
+        # Display results
+        result_surface = pygame.Surface((600,400))
+        result_surface.fill((16,16,16))
+        result_surface.set_alpha(128)
+        result_surface_rect = result_surface.get_rect()
+        result_surface_rect.center = CENTER
+        self._screen.blit(result_surface, result_surface_rect)
+
+        # Winner
+        font = pygame.font.Font(None,32)
+        win1_text = font.render("Play 1 is the winner",True,(255,255,255))
+        win2_text = font.render("Play 2 is the winner",True,(255,255,255))
+        draw_text = font.render("Nobody is the winner",True,(255,255,255))
+        win_text_rect = win1_text.get_rect()
+        win_text_rect.center = tuple(map(lambda x,y:x-y, CENTER,(0,80)))
+        alive = self.alive()
+        if alive[0]:
+             self._screen.blit(win1_text, win_text_rect)
+        elif alive[1]:
+             self._screen.blit(win2_text, win_text_rect)
+        else:
+             self._screen.blit(draw_text, win_text_rect)
+
+        score_text = font.render("SCORE",True,(255,255,255))
+        score_text_rect = score_text.get_rect()
+        score_text_rect.center = tuple(map(lambda x,y:x-y, CENTER,(0,40)))
+        self._screen.blit(score_text, score_text_rect)
+
+        result1_text = font.render("Player 1     "+ str(score1),True,(255,255,255))
+        result1_text_rect = result1_text.get_rect()
+        result1_text_rect.center = tuple(map(lambda x,y:x-y, CENTER,(0,0)))
+        result2_text = font.render("Player 2     "+ str(score2),True,(255,255,255))
+        result2_text_rect = result2_text.get_rect()
+        result2_text_rect.center = tuple(map(lambda x,y:x-y, CENTER,(0,-40)))
+        self._screen.blit(result1_text, result1_text_rect)
+        self._screen.blit(result2_text, result2_text_rect)
 
     def run(self) -> None:
         # Call this in main loop
@@ -111,11 +156,10 @@ class Game:
                 if collision_delay:
                     collision_delay -= 1
 
-            elif self.get_phase()=="end":
-                self.run_end()
-            
             # render stuff
             self.__draw(self._zero_vector, self._unit_size)
+            if self.get_phase()=="end":
+                 self.run_end()
 
             # ======== DEBUGGING ==========
             # Draw debugging points on the screen
@@ -144,6 +188,15 @@ class Game:
         player2.set_oppo(player1)
         self._players.append(player1)
         self._players.append(player2)
+
+    def build_players(self):
+        player1=self._builders[0].build()
+        player2=self._builders[1].build()
+        self.add_players(player1,player2)
+        player1.move_to((-5,0))
+        player2.move_to((5,0))
+        self._origin_hp.extend([player1.total_hp(),player2.total_hp()])
+        self.set_phase("battle")
 
     def get_player(self, index: int):
         # Return players[index](BlockAssembly)
@@ -239,13 +292,7 @@ class Game:
             if self._builder_index == 0:
                  self._builder_index = 1
             else:
-                player1=self._builders[0].build()
-                player2=self._builders[1].build()
-                self.add_players(player1,player2)
-                player1.move_to((-5,0))
-                player2.move_to((5,0))
-                self.set_phase("battle")
-        
+                self.build_players()
 
 
     def __battle_key_events(self):

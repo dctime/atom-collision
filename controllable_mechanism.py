@@ -19,3 +19,8 @@ class ControllableMechansim(BlockMechanism):
 
     def core_move_right(self, time_between_frame:float) -> None:
         self.add_force((CORE_FORCE, 0), self.get_coor(), time_between_frame)
+
+    def total_hp(self)->float:
+        HPs = [bi._hp for bi in self.get_blocks().values()]
+        return sum(HPs)
+

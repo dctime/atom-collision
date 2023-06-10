@@ -43,7 +43,7 @@ class ThrusterParticlesEffect():
         self.__particles = []
         self.__current_emit_delay = 0
 
-    def emit_and_render(self, screen, zero_vector:tuple, unit_size:float, emit_loc:tuple, emit_velocity:tuple, error_tolerance:float, particle_size:float, emit_delay:float, lifetime:int):
+    def emit(self, emit_loc:tuple, emit_velocity:tuple, error_tolerance:float, particle_size:float, emit_delay:float, lifetime:int):
         self.__current_emit_delay -= 1
         if self.__current_emit_delay < 0:
             self.__current_emit_delay = emit_delay
@@ -51,6 +51,9 @@ class ThrusterParticlesEffect():
             randomness_velocity = (emit_velocity[0]+random.uniform(-error_tolerance, error_tolerance), emit_velocity[1]+random.uniform(-error_tolerance, error_tolerance))
             self.__particles.append(ThrusterParticleEffect(particle_size, emit_loc, randomness_velocity, lifetime))
         
+        
+
+    def render(self, screen, zero_vector, unit_size):
         for particle in self.__particles:
             if not particle.render(screen, zero_vector, unit_size):
                 del particle

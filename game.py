@@ -4,7 +4,7 @@ from collision_director import CollisionDirector
 from gravity_director import GravityDirector
 from color import Color
 from sound import Sounds
-from particle_effect import GravityParticleEffect
+from particle_effect import GravityParticleEffect, ThrusterParticlesEffect
 import pygame
 import random
 
@@ -38,6 +38,9 @@ class Game:
         self._running = True
         self._gravity_particle_effect = GravityParticleEffect(max(pygame_screen.get_size()[0], pygame_screen.get_size()[1]), (0, 0), 3)
         self._origin_hp = []
+        self._thruster_particle_effect = ThrusterParticlesEffect()
+        self._player_thruster_particle_effect = {}
+
         
     def alive(self)->tuple:
         alive1 = self.get_player(0)._core._visible
@@ -45,6 +48,9 @@ class Game:
         return (alive1,alive2)
     
     def run_build(self)->None:
+        # render stuff
+        self.__draw_blocks(self._zero_vector, self._unit_size)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self._running = False
@@ -53,6 +59,12 @@ class Game:
                 self.__build_key_events(key)
 
     def run_battle(self,collision_delay,COLLISION_DELAY_MAX)->None:
+        # render stuff
+        self._gravity_particle_effect.render(self._screen, self._zero_vector, self._unit_size)
+        self.__draw_blocks(self._zero_vector, self._unit_size)
+        for player in self._players:
+            self._player_thruster_particle_effect[player].render(self._screen, self._zero_vector, self._unit_size)
+
         # force stuff
         for player in self._players:
             self._gravity_director.add_gravity(player)
@@ -72,9 +84,6 @@ class Game:
         # moving stuff
         for player in self._players:
             player.move_by_physics(self._time_between_frame)
-
-        # particle stuff
-        self._gravity_particle_effect.render(self._screen, self._zero_vector, self._unit_size)
         
         # Check if the game is end
         alive=self.alive()
@@ -82,6 +91,9 @@ class Game:
             self.set_phase("end")
 
     def run_end(self)->None:
+        # render stuff
+        self.__draw_blocks(self._zero_vector, self._unit_size)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                     self._running = False
@@ -155,9 +167,6 @@ class Game:
                 self.run_battle(collision_delay,COLLISION_DELAY_MAX)
                 if collision_delay:
                     collision_delay -= 1
-
-            # render stuff
-            self.__draw(self._zero_vector, self._unit_size)
             if self.get_phase()=="end":
                  self.run_end()
 
@@ -188,6 +197,9 @@ class Game:
         player2.set_oppo(player1)
         self._players.append(player1)
         self._players.append(player2)
+        for player in self._players:
+            self._player_thruster_particle_effect[player] = ThrusterParticlesEffect()
+
 
     def build_players(self):
         player1=self._builders[0].build()
@@ -227,17 +239,21 @@ class Game:
         # Apply action on the player
         if action == Actions.CORE_MOVE_UP:
             player.core_move_up(self._time_between_frame)
+            self._player_thruster_particle_effect[player].emit(player.get_coor(), (0, 0.03), 0.02, 0.1, 10, 100)
 
         elif action == Actions.CORE_MOVE_DOWN:
             player.core_move_down(self._time_between_frame)
+            self._player_thruster_particle_effect[player].emit(player.get_coor(), (0, -0.03), 0.02, 0.1, 10, 100)
 
         elif action == Actions.CORE_MOVE_LEFT:
             player.core_move_left(self._time_between_frame)
+            self._player_thruster_particle_effect[player].emit(player.get_coor(), (0.03, 0), 0.02, 0.1, 10, 100)
         
         elif action == Actions.CORE_MOVE_RIGHT:
             player.core_move_right(self._time_between_frame)
+            self._player_thruster_particle_effect[player].emit(player.get_coor(), (-0.03, 0), 0.02, 0.1, 10, 100)
 
-    def __draw(self, zero_vector:tuple, unit_size:int) -> None:
+    def __draw_blocks(self, zero_vector:tuple, unit_size:int) -> None:
         # Draw background, players and objects(follow the order)
         # render called below are all undefined yet
 
@@ -305,7 +321,6 @@ class Game:
                 for key in KeyGroups.ThrusterKeys:
                     if event.key == key:
                         Sounds.THRUSTER_BURN.play()
-                        print("WHOOOSE GAME")
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w]:

@@ -119,7 +119,7 @@ class Game:
 
             # ======== DEBUGGING ==========
             # Draw debugging points on the screen
-            pygame.draw.circle(self._screen, Color.MID_SCREEN_COLOR, self._zero_vector, 3)
+            # pygame.draw.circle(self._screen, Color.MID_SCREEN_COLOR, self._zero_vector, 3)
 
             # Draw center of mass of player1
             #pygame.draw.circle(self._screen, Color.CENTER_OF_MASS_COLOR, change_normalized_into_real(self._zero_vector, self._unit_size, self._players[0].get_center_of_mass_coor()), 3)

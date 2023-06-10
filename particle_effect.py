@@ -12,6 +12,7 @@ class GravityParticleEffect():
         self.__width = width
 
     def render(self, zero_vector:tuple, unit_size:float):
+        pygame.draw.circle(self.__screen, Color.GRAVITY_PARTICLE_COLOR, change_normalized_into_real(zero_vector, unit_size, self.__loc), 5, 0)
         pygame.draw.circle(self.__screen, Color.GRAVITY_PARTICLE_COLOR, change_normalized_into_real(zero_vector, unit_size, self.__loc), self.__radius, self.__width)
         self.__radius -= 0.5
         if self.__radius <= 0:

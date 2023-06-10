@@ -34,6 +34,7 @@ class DefenseBlock(Block):
         ratio = self.get_hp_ratio()
         if ratio == 0:
             self._status = 0
+            self._visible=False
         elif ratio < 0.25:
             self._status = 1
         elif ratio < 0.50:

@@ -2,7 +2,8 @@ from skin_bone import SkinBone
 import pygame
 import numpy as np
 import copy
-
+width = 1200/30
+height = 800/30
 
 class Block(SkinBone):
     def __init__(self, center_point: tuple, hp: int, color: tuple, mass: int, visible=True):
@@ -32,6 +33,7 @@ class Block(SkinBone):
         return self._hp
 
     def set_hp(self, hp):
+        print("new hp:", hp)
         self._hp = hp
 
     def damage_block(self, value):
@@ -39,6 +41,11 @@ class Block(SkinBone):
             self._hp = 0
         else:
             self._hp -= value
+    def isValid(self):
+        """
+        Check if the coordinate of the block is valid
+        """
+        x , y = self.get_coor()
 
     def heal_block(self, value):
         self._hp += value
@@ -70,7 +77,6 @@ class Block(SkinBone):
         for node in self.get_nodes():
             new_nodes.append((node[0]+dir_vector[0], node[1]+dir_vector[1]))
         self.set_nodes(new_nodes)
-        # Armed block
 
     def rotate(self, pivot_point:tuple, theta:float) -> None:
         theta = theta % (2*np.pi)

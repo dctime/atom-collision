@@ -2,6 +2,7 @@ from block_mechanism import BlockMechanism
 from leaf_blocks import CoreBlock
 from block import Block
 import numpy as np
+import math
 
 class CollisionDirector():
     def detect_and_effect_collision(self,block_mechanism_1:BlockMechanism, block_mechanism_2:BlockMechanism, time_between_frame:float):
@@ -12,6 +13,8 @@ class CollisionDirector():
         '''
         for _, block1 in block_mechanism_1.get_blocks().items():
             for _, block2 in block_mechanism_2.get_blocks().items():
+                if not (block1._visible and block2._visible):
+                    continue
                 if not (self.block_collide_data(block1, block2) == None):
                     # print("Col Director:", self.block_collide_data(block1, block2))
                     effect_loc, normal_vector_block2= self.block_collide_data(block1, block2)
@@ -23,6 +26,14 @@ class CollisionDirector():
                     force_2 = (impluse[0]/time_between_frame, impluse[1]/time_between_frame)
                     block_mechanism_1.add_force(force_1, effect_loc, time_between_frame)
                     block_mechanism_2.add_force(force_2, effect_loc, time_between_frame)
+                    
+                    # Damage block
+                    val1=math.sqrt(block_mechanism_1._momentum[0]**2 + block_mechanism_1._momentum[1]**2)
+                    val2=math.sqrt(block_mechanism_2._momentum[0]**2 + block_mechanism_2._momentum[1]**2)
+                    val = (val1+val2)/100
+                    block1.damage_block(val)
+                    block2.damage_block(val)
+                    print("damage: ",val)
 
                     return (block1, block2)
         return None

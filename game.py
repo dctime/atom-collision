@@ -27,7 +27,12 @@ class Game:
         self._time_between_frame = time_between_frame
         self._zero_vector = zero_vector
         self._unit_size = unit_size
-
+        
+    def alive(self)->tuple:
+        alive1 = self.get_player(0)._core._visible
+        alive2 = self.get_player(1)._core._visible
+        return (alive1,alive2)
+    
     def run(self) -> None:
         # Call this in main loop
         clock = pygame.time.Clock()
@@ -88,6 +93,17 @@ class Game:
             clock.tick(1/self._time_between_frame) # it doesnt not become super fast idk why
             game_time += 1
 
+            # Check if the game is end
+            alive=self.alive()
+            if not (alive[0] or alive[1]):
+                print("Draw")
+                break
+            if not alive[0]:
+                print("Player 2 is winner.")
+                break
+            if not alive[1]:
+                print("Player 1 is winner.")
+                break
         # Quit Pygame
         pygame.quit()
     

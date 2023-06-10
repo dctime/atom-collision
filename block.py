@@ -2,8 +2,6 @@ from skin_bone import SkinBone
 import pygame
 import numpy as np
 import copy
-width = 1200/30
-height = 800/30
 
 class Block(SkinBone):
     def __init__(self, center_point: tuple, hp: int, color: tuple, mass: int, visible=True):
@@ -41,11 +39,6 @@ class Block(SkinBone):
             self._hp = 0
         else:
             self._hp -= value
-    def isValid(self):
-        """
-        Check if the coordinate of the block is valid
-        """
-        x , y = self.get_coor()
 
     def heal_block(self, value):
         self._hp += value

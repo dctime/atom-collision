@@ -1,4 +1,5 @@
 from controllable_mechanism import ControllableMechansim
+from controllable_mechanism_builder import ControllableMechansimBuilder
 from collision_director import CollisionDirector
 from gravity_director import GravityDirector
 from color import Color
@@ -19,6 +20,8 @@ class KeyGroups():
 class Game:
     def __init__(self, pygame_screen, time_between_frame:float, zero_vector:tuple, unit_size:int, background: str = None) -> None:
         self._players = []  # list of players(BlockMechanism)
+        self._builders = [ControllableMechansimBuilder(), ControllableMechansimBuilder()] # list of ControllableMechansimBuilder
+        self._builder_index = 0
         self._objects = []   # list of objects(like bullet)
         self._phase = "build"
         self._background = background
@@ -38,8 +41,10 @@ class Game:
     def run_build(self)->None:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                    self._running = False
-        pass
+                self._running = False
+            elif event.type == pygame.KEYDOWN:
+                key = event.key
+                self.__build_key_events(key)
 
     def run_battle(self,collision_delay,COLLISION_DELAY_MAX)->None:
         # force stuff
@@ -61,13 +66,18 @@ class Game:
         # moving stuff
         for player in self._players:
             player.move_by_physics(self._time_between_frame)
+        
+        # Check if the game is end
+        alive=self.alive()
+        if not (alive[0] and alive[1]):
+            self.set_phase("end")
 
     def run_end(self)->None:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                     self._running = False
         pass
-    
+
     def run(self) -> None:
         # Call this in main loop
         collision_delay = 10
@@ -106,23 +116,18 @@ class Game:
             pygame.draw.circle(self._screen, Color.MID_SCREEN_COLOR, self._zero_vector, 3)
 
             # Draw center of mass of player1
-            pygame.draw.circle(self._screen, Color.CENTER_OF_MASS_COLOR, change_normalized_into_real(self._zero_vector, self._unit_size, self._players[0].get_center_of_mass_coor()), 3)
+            #pygame.draw.circle(self._screen, Color.CENTER_OF_MASS_COLOR, change_normalized_into_real(self._zero_vector, self._unit_size, self._players[0].get_center_of_mass_coor()), 3)
             # Draw center of mass of player2
-            pygame.draw.circle(self._screen, Color.CENTER_OF_MASS_COLOR, change_normalized_into_real(self._zero_vector, self._unit_size, self._players[1].get_center_of_mass_coor()), 3)
+            #pygame.draw.circle(self._screen, Color.CENTER_OF_MASS_COLOR, change_normalized_into_real(self._zero_vector, self._unit_size, self._players[1].get_center_of_mass_coor()), 3)
             # draw every blocks coor
-            for _, block in self._players[0].get_blocks().items():
-                pygame.draw.circle(self._screen, Color.BLOCK_COOR_COLOR, change_normalized_into_real(self._zero_vector, self._unit_size, block.get_coor()), 2)
+            #for _, block in self._players[0].get_blocks().items():
+            #    pygame.draw.circle(self._screen, Color.BLOCK_COOR_COLOR, change_normalized_into_real(self._zero_vector, self._unit_size, block.get_coor()), 2)
 
             
             # Update screen
             pygame.display.flip()
             clock.tick(1/self._time_between_frame) # it doesnt not become super fast idk why
             game_time += 1
-
-            # Check if the game is end
-            alive=self.alive()
-            if not (alive[0] and alive[1]):
-                self.set_phase("end")
 
         # Quit Pygame
         pygame.quit()
@@ -186,8 +191,53 @@ class Game:
 
         for player in self._players:
             player.render(self._screen, zero_vector, unit_size)
+
+        change_normalized_into_real = lambda zero_vector, unit_size, target_vector:(target_vector[0]*unit_size+zero_vector[0], target_vector[1]*unit_size+zero_vector[1])
+        builder = self._builders[self._builder_index]
+        builder.render(self._screen,zero_vector,unit_size, change_normalized_into_real(zero_vector,unit_size,builder._cursor))
         
         pass
+    
+    def __build_key_events(self,key):
+        # Move cursor
+        if key == pygame.K_w:
+            self._builders[self._builder_index].move_cursor("up")
+        if key == pygame.K_s:
+            self._builders[self._builder_index].move_cursor("down")
+        if key == pygame.K_a:
+            self._builders[self._builder_index].move_cursor("left")
+        if key == pygame.K_d:
+            self._builders[self._builder_index].move_cursor("right")
+
+        # Set texture
+        if key == pygame.K_1:
+            self._builders[self._builder_index].set_block_type("wood")
+        if key == pygame.K_2:
+            self._builders[self._builder_index].set_block_type("stone")
+
+        # Add block
+        if key == pygame.K_UP:
+            self._builders[self._builder_index].add_block_dir("up")
+        if key == pygame.K_DOWN:
+            self._builders[self._builder_index].add_block_dir("down")
+        if key == pygame.K_LEFT:
+            self._builders[self._builder_index].add_block_dir("left")
+        if key == pygame.K_RIGHT:
+            self._builders[self._builder_index].add_block_dir("right")
+        
+        # Swith to battle phase
+        if key == pygame.K_RETURN:
+            if self._builder_index == 0:
+                 self._builder_index = 1
+            else:
+                player1=self._builders[0].build()
+                player2=self._builders[1].build()
+                self.add_players(player1,player2)
+                player1.move_to((-5,0))
+                player2.move_to((5,0))
+                self.set_phase("battle")
+        
+
 
     def __battle_key_events(self):
         # key events
@@ -203,28 +253,28 @@ class Game:
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w]:
-            self.act(self._players[0], Actions.CORE_MOVE_UP)
+                self.act(self._players[0], Actions.CORE_MOVE_UP)
 
         if keys[pygame.K_s]:
-            self.act(self._players[0], Actions.CORE_MOVE_DOWN)
+                self.act(self._players[0], Actions.CORE_MOVE_DOWN)
                 
         if keys[pygame.K_a]:
-            self.act(self._players[0], Actions.CORE_MOVE_LEFT)
+                self.act(self._players[0], Actions.CORE_MOVE_LEFT)
 
         if keys[pygame.K_d]:
-            self.act(self._players[0], Actions.CORE_MOVE_RIGHT)
+                self.act(self._players[0], Actions.CORE_MOVE_RIGHT)
 
         if keys[pygame.K_UP]:
-            self.act(self._players[1], Actions.CORE_MOVE_UP)
+                self.act(self._players[1], Actions.CORE_MOVE_UP)
 
         if keys[pygame.K_DOWN]:
-            self.act(self._players[1], Actions.CORE_MOVE_DOWN)
+                self.act(self._players[1], Actions.CORE_MOVE_DOWN)
 
         if keys[pygame.K_LEFT]:
-            self.act(self._players[1], Actions.CORE_MOVE_LEFT)
+                self.act(self._players[1], Actions.CORE_MOVE_LEFT)
 
         if keys[pygame.K_RIGHT]:
-            self.act(self._players[1], Actions.CORE_MOVE_RIGHT)
+                self.act(self._players[1], Actions.CORE_MOVE_RIGHT)
 
     def __collision_events(self, collision_report):
         '''

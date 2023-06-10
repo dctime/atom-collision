@@ -79,7 +79,7 @@ class BlockAssembly():
         return self._blocks
 
     def get_block(self, coor: tuple) -> DefenseBlock:
-        return self._blocks.get(coor)
+        return self._blocks.get(tuple(coor))
 
     def get_able(self, coor: tuple) -> bool:
         # check if coor is able to add_block

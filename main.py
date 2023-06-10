@@ -21,6 +21,7 @@ pygame.display.set_caption("My Pygame Screen")
 
 # set up the environment
 game = Game(screen, 1/FRAMERATE, MID_SCREEN_POINT, UNIT_SIZE)
+"""
 game.set_phase("battle")
 player1 = ControllableMechansim(CoreBlock((0, 0)))
 player2 = ControllableMechansim(CoreBlock((0, 0)))
@@ -44,6 +45,6 @@ player2.add_block(WoodBlock((1, -1)))
 game.add_players(player1, player2)
 player1.move_to((-5, 0))
 player2.move_to((5, 0))
-
+"""
 game.run()
 

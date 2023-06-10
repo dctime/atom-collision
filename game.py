@@ -34,8 +34,10 @@ class Game:
         alive1 = self.get_player(0)._core._visible
         alive2 = self.get_player(1)._core._visible
         return (alive1,alive2)
+    
     def run_build(self)->None:
         pass
+
     def run_battle(self,collision_delay,COLLISION_DELAY_MAX)->None:
         # force stuff
         for player in self._players:
@@ -59,6 +61,7 @@ class Game:
 
     def run_end(self)->None:
         pass
+    
     def run(self) -> None:
         # Call this in main loop
         collision_delay = 10

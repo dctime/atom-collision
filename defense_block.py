@@ -66,6 +66,8 @@ class DefenseBlock(Block):
                 self._color = self._init_color
             case _:
                 raise Exception('In set_color: Value of status out of range')
+            
+        self._color = (min(ci,255) for ci in self._color)
 
     def damage_block(self, value):
         super().damage_block(value)

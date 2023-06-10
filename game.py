@@ -2,6 +2,7 @@ from controllable_mechanism import ControllableMechansim
 from collision_director import CollisionDirector
 from gravity_director import GravityDirector
 from color import Color
+from sound import Sounds
 from pygame import mixer
 import pygame
 import random
@@ -12,10 +13,6 @@ class Actions():
     CORE_MOVE_LEFT = "core_move_left"
     CORE_MOVE_RIGHT = "core_move_right"
 
-class Sounds():
-    mixer.init()
-    BUMP1 = pygame.mixer.Sound('bump1.mp3')
-    BUMP2 = pygame.mixer.Sound('bump2.mp3')
 
 class Game:
     def __init__(self, pygame_screen, time_between_frame:float, zero_vector:tuple, unit_size:int, background: str = None) -> None:

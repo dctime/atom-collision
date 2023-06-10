@@ -13,7 +13,7 @@ screen = pygame.display.set_mode((1200, 800))
 screen_x_size, screen_y_size = screen.get_size()
 MID_SCREEN_POINT = (screen_x_size/2, screen_y_size/2)
 UNIT_SIZE = 30
-FRAMERATE = 1000
+FRAMERATE = 500
 
 # Set window title
 pygame.display.set_caption("My Pygame Screen")

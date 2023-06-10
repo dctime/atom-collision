@@ -1,5 +1,5 @@
 class Color():
-    CORE_COLOR = (255, 255, 255)
+    CORE_COLOR = (0, 102, 153)
     STONE_COLOR = (125, 125, 125)
     DEBUGGING_COLOR = (255, 0, 0)
     BLOCK_COOR_COLOR = (255, 137, 242)

@@ -31,7 +31,7 @@ class CollisionDirector():
                     # Damage block
                     val1=math.sqrt(block_mechanism_1._momentum[0]**2 + block_mechanism_1._momentum[1]**2)
                     val2=math.sqrt(block_mechanism_2._momentum[0]**2 + block_mechanism_2._momentum[1]**2)
-                    val = (val1+val2)/1000
+                    val = (val1+val2)/5000
                     block1.damage_block(val)
                     block2.damage_block(val)
                     #print("damage: ",val)

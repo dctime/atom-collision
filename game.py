@@ -13,6 +13,8 @@ class Actions():
     CORE_MOVE_LEFT = "core_move_left"
     CORE_MOVE_RIGHT = "core_move_right"
 
+class KeyGroups():
+    ThrusterKeys = (pygame.K_w, pygame.K_s, pygame.K_a, pygame.K_d, pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT)
 
 class Game:
     def __init__(self, pygame_screen, time_between_frame:float, zero_vector:tuple, unit_size:int, background: str = None) -> None:
@@ -26,6 +28,7 @@ class Game:
         self._time_between_frame = time_between_frame
         self._zero_vector = zero_vector
         self._unit_size = unit_size
+        self._running = True
         
     def alive(self)->tuple:
         alive1 = self.get_player(0)._core._visible
@@ -33,6 +36,9 @@ class Game:
         return (alive1,alive2)
     
     def run_build(self)->None:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                    self._running = False
         pass
 
     def run_battle(self,collision_delay,COLLISION_DELAY_MAX)->None:
@@ -50,13 +56,16 @@ class Game:
                         self.__collision_events(collision_report)
         
         
-        self.__key_events()
+        self.__battle_key_events()
 
         # moving stuff
         for player in self._players:
             player.move_by_physics(self._time_between_frame)
 
     def run_end(self)->None:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                    self._running = False
         pass
     
     def run(self) -> None:
@@ -70,14 +79,13 @@ class Game:
         # Create screen
         # screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         
-        running = True
         game_time = 0
 
-        while running:
+        while self._running:
             # shut down the game
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
+            # for event in pygame.event.get():
+            #     if event.type == pygame.QUIT:
+            #         running = False
 
             # #print("Main: GAME TIME:", game_time)
             # set up the background
@@ -184,8 +192,18 @@ class Game:
         
         pass
 
-    def __key_events(self):
+    def __battle_key_events(self):
         # key events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                    self._running = False
+
+            if event.type == pygame.KEYDOWN:
+                for key in KeyGroups.ThrusterKeys:
+                    if event.key == key:
+                        Sounds.THRUSTER_BURN.play()
+                        print("WHOOOSE GAME")
+
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w]:
             self.act(self._players[0], Actions.CORE_MOVE_UP)

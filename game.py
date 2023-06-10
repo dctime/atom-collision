@@ -1,13 +1,20 @@
 from controllable_mechanism import ControllableMechansim
 from collision_director import CollisionDirector
 from color import Color
+from pygame import mixer
 import pygame
+import random
 
 class Actions():
     CORE_MOVE_UP = "core_move_up"
     CORE_MOVE_DOWN = "core_move_down"
     CORE_MOVE_LEFT = "core_move_left"
     CORE_MOVE_RIGHT = "core_move_right"
+
+class Sounds():
+    mixer.init()
+    BUMP1 = pygame.mixer.Sound('bump1.mp3')
+    BUMP2 = pygame.mixer.Sound('bump2.mp3')
 
 class Game:
     def __init__(self, pygame_screen, time_between_frame:float, zero_vector:tuple, unit_size:int, background: str = None) -> None:
@@ -25,12 +32,14 @@ class Game:
         # Call this in main loop
         clock = pygame.time.Clock()
         change_normalized_into_real = lambda zero_vector, unit_size, target_vector:(target_vector[0]*unit_size+zero_vector[0], target_vector[1]*unit_size+zero_vector[1])
-        
+        mixer.music.set_volume(0.7)
         # Create screen
         # screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         
         running = True
         game_time = 0
+        collision_delay = 10
+        COLLISION_DELAY_MAX = 10
 
         while running:
             # print("Main: GAME TIME:", game_time)
@@ -38,44 +47,21 @@ class Game:
             self._screen.fill((0, 0, 0))
 
             # collision stuff
-            collide = False
-            for index1 in range(len(self._players)-1):
-                for index2 in range(index1+1, len(self._players)):
-                    collision_report = self._collision_director.detect_and_effect_collision(self._players[index1], self._players[index2], self._time_between_frame)
-                    if not (collision_report == None):
-                        print(collision_report)
-                        collide = True
+            if collision_delay:
+                collision_delay -= 1
+            else:
+                collision_delay = COLLISION_DELAY_MAX
+                for index1 in range(len(self._players)-1):
+                    for index2 in range(index1+1, len(self._players)):
+                        collision_report = self._collision_director.detect_and_effect_collision(self._players[index1], self._players[index2], self._time_between_frame)
+                        if not (collision_report == None):
+                            self.__collision_events(collision_report)
             
-            # key events
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
 
-            if not collide:
-                keys = pygame.key.get_pressed()
-                if keys[pygame.K_w]:
-                    self.act(self._players[0], Actions.CORE_MOVE_UP)
-
-                if keys[pygame.K_s]:
-                    self.act(self._players[0], Actions.CORE_MOVE_DOWN)
-                
-                if keys[pygame.K_a]:
-                    self.act(self._players[0], Actions.CORE_MOVE_LEFT)
-
-                if keys[pygame.K_d]:
-                    self.act(self._players[0], Actions.CORE_MOVE_RIGHT)
-
-                if keys[pygame.K_UP]:
-                    self.act(self._players[1], Actions.CORE_MOVE_UP)
-
-                if keys[pygame.K_DOWN]:
-                    self.act(self._players[1], Actions.CORE_MOVE_DOWN)
-
-                if keys[pygame.K_LEFT]:
-                    self.act(self._players[1], Actions.CORE_MOVE_LEFT)
-
-                if keys[pygame.K_RIGHT]:
-                    self.act(self._players[1], Actions.CORE_MOVE_RIGHT)
+            self.__key_events()
 
             # moving stuff
             for player in self._players:
@@ -167,12 +153,38 @@ class Game:
         
         pass
 
-    def __events(self):
-        # Handle events
-        for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                x, y = pygame.mouse.get_pos()
-                print("Nothing happens")
+    def __key_events(self):
+        # key events
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_w]:
+            self.act(self._players[0], Actions.CORE_MOVE_UP)
 
-            if event.type == pygame.QUIT:
-                running = False
+        if keys[pygame.K_s]:
+            self.act(self._players[0], Actions.CORE_MOVE_DOWN)
+                
+        if keys[pygame.K_a]:
+            self.act(self._players[0], Actions.CORE_MOVE_LEFT)
+
+        if keys[pygame.K_d]:
+            self.act(self._players[0], Actions.CORE_MOVE_RIGHT)
+
+        if keys[pygame.K_UP]:
+            self.act(self._players[1], Actions.CORE_MOVE_UP)
+
+        if keys[pygame.K_DOWN]:
+            self.act(self._players[1], Actions.CORE_MOVE_DOWN)
+
+        if keys[pygame.K_LEFT]:
+            self.act(self._players[1], Actions.CORE_MOVE_LEFT)
+
+        if keys[pygame.K_RIGHT]:
+            self.act(self._players[1], Actions.CORE_MOVE_RIGHT)
+
+    def __collision_events(self, collision_report):
+        '''
+        called when collision happnens
+        '''
+        if random.randint(0, 1):
+            Sounds.BUMP1.play()
+        else:
+            Sounds.BUMP2.play()

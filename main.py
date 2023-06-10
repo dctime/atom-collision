@@ -1,4 +1,5 @@
 import pygame
+from pygame import mixer
 from leaf_blocks import CoreBlock, StoneBlock, WoodBlock
 from controllable_mechanism import ControllableMechansim
 import math

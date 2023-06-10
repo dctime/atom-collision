@@ -144,7 +144,7 @@ class CollisionDirector():
         e must be 0 to 1
         normal_vector is the back direction of the opponent's direction
         '''
-        SCALAR_MIN = 400
+        SCALAR_MIN = 0
         momentum1 = np.array(momentum1).transpose()
         momentum2 = np.array(momentum2).transpose()
         

@@ -2,6 +2,7 @@ from block_mechanism import BlockMechanism
 from leaf_blocks import CoreBlock
 from block import Block
 import numpy as np
+np.seterr(divide='ignore', invalid='ignore')
 import math
 
 class CollisionDirector():
@@ -28,9 +29,9 @@ class CollisionDirector():
                     block_mechanism_2.add_force(force_2, effect_loc, time_between_frame)
                     
                     # Damage block
-                    val1=math.sqrt(block_mechanism_1._momentum[0]**2 + block_mechanism_1._momentum[1]**2)
-                    val2=math.sqrt(block_mechanism_2._momentum[0]**2 + block_mechanism_2._momentum[1]**2)
-                    val = (val1+val2)/100
+                    val1=math.sqrt(block_mechanism_1._momentum[0]**10 + block_mechanism_1._momentum[1]**10)
+                    val2=math.sqrt(block_mechanism_2._momentum[0]**10 + block_mechanism_2._momentum[1]**10)
+                    val = (val1+val2)/100000000000000000
                     block1.damage_block(val)
                     block2.damage_block(val)
                     #print("damage: ",val)
@@ -111,6 +112,12 @@ class CollisionDirector():
         else:
             vn = -1*(vn/vn_length)
             return vn
+        
+    def _array_to_tuple(self, arr):
+        if isinstance(arr, np.ndarray):
+            return tuple(self._array_to_tuple(e) for e in arr)
+        else:
+            return arr
               
     def _detect_crossover(self, line1:tuple, line2:tuple) -> bool:
         '''

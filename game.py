@@ -4,9 +4,11 @@ from collision_director import CollisionDirector
 from gravity_director import GravityDirector
 from color import Color
 from sound import Sounds
-from pygame import mixer
+from particle_effect import GravityParticleEffect
 import pygame
 import random
+
+
 
 class Actions():
     CORE_MOVE_UP = "core_move_up"
@@ -18,7 +20,7 @@ class KeyGroups():
     ThrusterKeys = (pygame.K_w, pygame.K_s, pygame.K_a, pygame.K_d, pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT)
 
 class Game:
-    def __init__(self, pygame_screen, time_between_frame:float, zero_vector:tuple, unit_size:int, background: str = None) -> None:
+    def __init__(self, pygame_screen:pygame.Surface, time_between_frame:float, zero_vector:tuple, unit_size:int, background: str = None) -> None:
         self._players = []  # list of players(BlockMechanism)
         self._builders = [ControllableMechansimBuilder(), ControllableMechansimBuilder()] # list of ControllableMechansimBuilder
         self._builder_index = 0
@@ -32,6 +34,7 @@ class Game:
         self._zero_vector = zero_vector
         self._unit_size = unit_size
         self._running = True
+        self._gravity_particle_effect = GravityParticleEffect(pygame_screen, max(pygame_screen.get_size()[0], pygame_screen.get_size()[1]), (0, 0), 3)
         
     def alive(self)->tuple:
         alive1 = self.get_player(0)._core._visible
@@ -66,6 +69,9 @@ class Game:
         # moving stuff
         for player in self._players:
             player.move_by_physics(self._time_between_frame)
+
+        # particle stuff
+        self._gravity_particle_effect.render(self._zero_vector, self._unit_size)
         
         # Check if the game is end
         alive=self.alive()
@@ -84,7 +90,7 @@ class Game:
         COLLISION_DELAY_MAX = 10
 
         clock = pygame.time.Clock()
-        change_normalized_into_real = lambda zero_vector, unit_size, target_vector:(target_vector[0]*unit_size+zero_vector[0], target_vector[1]*unit_size+zero_vector[1])
+        
         
         game_time = 0
 

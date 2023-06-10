@@ -198,12 +198,11 @@ class Game:
         for player in self._players:
             player.render(self._screen, zero_vector, unit_size)
 
-        change_normalized_into_real = lambda zero_vector, unit_size, target_vector:(target_vector[0]*unit_size+zero_vector[0], target_vector[1]*unit_size+zero_vector[1])
-        builder = self._builders[self._builder_index]
-        builder.render(self._screen,zero_vector,unit_size, change_normalized_into_real(zero_vector,unit_size,builder._cursor))
-        
-        pass
-    
+        if self.get_phase() == "build":
+            change_normalized_into_real = lambda zero_vector, unit_size, target_vector:(target_vector[0]*unit_size+zero_vector[0], target_vector[1]*unit_size+zero_vector[1])
+            builder = self._builders[self._builder_index]
+            builder.render(self._screen,zero_vector,unit_size, change_normalized_into_real(zero_vector,unit_size,builder._cursor))
+            
     def __build_key_events(self,key):
         # Move cursor
         if key == pygame.K_w:
@@ -230,6 +229,10 @@ class Game:
             self._builders[self._builder_index].add_block_dir("left")
         if key == pygame.K_RIGHT:
             self._builders[self._builder_index].add_block_dir("right")
+        
+        # Delete block
+        if key == pygame.K_DELETE:
+             self._builders[self._builder_index].delete_block()
         
         # Swith to battle phase
         if key == pygame.K_RETURN:

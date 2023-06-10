@@ -54,6 +54,31 @@ class ControllableMechansimBuilder(BlockMechanism):
         if block != None:
             self.add_block(block)
 
+    def delete_block(self)->None:
+        block = self.get_block(self._cursor)
+        if block == self._core:
+            print("Cannot delete core.")
+            return
+        self.remove_block(block)
+
+        # Set cursor
+        cur = self._cursor
+        candidate = [(cur[0]+1,cur[1]), (cur[0]-1,cur[1]), (cur[0],cur[1]+1), (cur[0],cur[1]-1)]
+        visited = {cur:True}
+        while True:
+            new_candidate = []
+            for ci in candidate:
+                visited[ci] = True
+                if self.get_block(ci) != None:
+                    self._cursor = ci
+                    return
+                ci_candidate = [(ci[0]+1,ci[1]), (ci[0]-1,ci[1]), (ci[0],ci[1]+1), (ci[0],ci[1]-1)]
+                for new_ci in ci_candidate:
+                    if visited.get(new_ci) == None:
+                        new_candidate.append(new_ci)
+            candidate = new_candidate
+
+
     def build(self) -> ControllableMechansim:
         player = ControllableMechansim(self._core)
         for ci,bi in self.get_blocks().items():
@@ -63,5 +88,5 @@ class ControllableMechansimBuilder(BlockMechanism):
     def render(self, screen, zero_vector:tuple, unit_size:int, center:tuple)->None:
         super().render(screen, zero_vector, unit_size)
 
-        color = (127,0,0)
-        pygame.draw.circle(screen, color, center, 2)
+        color = (127,0,0) if self._block_type=="wood" else (0,127,0)
+        pygame.draw.circle(screen, color, center, 4)

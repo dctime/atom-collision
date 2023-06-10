@@ -1,5 +1,6 @@
 from controllable_mechanism import ControllableMechansim
 from collision_director import CollisionDirector
+from gravity_director import GravityDirector
 from color import Color
 from pygame import mixer
 import pygame
@@ -24,6 +25,7 @@ class Game:
         self._background = background
         self._screen = pygame_screen
         self._collision_director = CollisionDirector()
+        self._gravity_director = GravityDirector(10**(10), (0, 0), time_between_frame)
         self._time_between_frame = time_between_frame
         self._zero_vector = zero_vector
         self._unit_size = unit_size
@@ -47,9 +49,18 @@ class Game:
         COLLISION_DELAY_MAX = 10
 
         while running:
+            # shut down the game
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+
             # print("Main: GAME TIME:", game_time)
             # set up the background
             self._screen.fill((0, 0, 0))
+
+            # force stuff
+            for player in self._players:
+                self._gravity_director.add_gravity(player)
 
             # collision stuff
             if collision_delay:
@@ -62,10 +73,7 @@ class Game:
                         if not (collision_report == None):
                             self.__collision_events(collision_report)
             
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-
+            
             self.__key_events()
 
             # moving stuff

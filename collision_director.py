@@ -133,7 +133,7 @@ class CollisionDirector():
                 (line1_equation(line2[0][0], line2[0][1]) < answer_if_on_line1 and line1_equation(line2[1][0], line2[1][1]) < answer_if_on_line1)):
                 # print("CROSSOVER")
                 line2_points_for_line1 = True
-        except ZeroDivisionError:
+        except: # ZeroDivisionError:
             x = line1[0][0]
             if not ((line2[0][0] > x and line2[1][0] > x) or (line2[0][0] < x and line2[1][0] < x)):
                 # print("CROSSOVER")
@@ -149,7 +149,7 @@ class CollisionDirector():
                 (line2_equation(line1[0][0], line1[0][1]) < answer_if_on_line2 and line2_equation(line1[1][0], line1[1][1]) < answer_if_on_line2)):
                 # print("CROSSOVER")
                 line1_points_for_line2 = True
-        except ZeroDivisionError:
+        except: # ZeroDivisionError:
             x = line2[0][0]
             if not ((line1[0][0] > x and line1[1][0] > x) or (line1[0][0] < x and line1[1][0] < x)):
                 # print("CROSSOVER")
@@ -162,15 +162,18 @@ class CollisionDirector():
         e must be 0 to 1
         normal_vector is the back direction of the opponent's direction
         '''
-        SCALAR_MIN = 0
+        SCALAR_MIN = 300
         momentum1 = np.array(momentum1).transpose()
         momentum2 = np.array(momentum2).transpose()
         
-        scalar = ((1+e)*(np.dot(((momentum1*(1/mass1))-(momentum2*(1/mass2))), normal_vector)))/((1/mass1)+(1/mass2))
+        scalar = ((1+e)*np.dot(((momentum1*(1/mass1))-(momentum2*(1/mass2))), normal_vector))/((1/mass1)+(1/mass2))
         scalar += abs((1+e)*(((angular_momentum1*(1/mass1))-(angular_momentum2*(1/mass2)))))/((1/mass1)+(1/mass2))
         print("Col dir: Scalar:", scalar)
-        if scalar < SCALAR_MIN:
-            scalar = SCALAR_MIN
+        if np.linalg.norm(scalar) < SCALAR_MIN:
+            if np.linalg.norm(scalar) == 0:
+                scalar = scalar*SCALAR_MIN
+            else:
+                scalar = scalar*(SCALAR_MIN/np.linalg.norm(scalar))
 
         impluse = scalar*normal_vector
         return impluse

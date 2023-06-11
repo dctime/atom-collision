@@ -8,10 +8,6 @@ from particle_effect import GravityParticleEffect, ThrusterParticlesEffect
 import pygame
 import random
 
-WIDTH = 1200
-HEIGHT = 800
-CENTER = (WIDTH//2, HEIGHT//2)
-
 class Actions():
     CORE_MOVE_UP = "core_move_up"
     CORE_MOVE_DOWN = "core_move_down"
@@ -137,11 +133,13 @@ class Game:
         score2 = int(hp2 + (self._origin_hp[0]-hp1))
 
         # Display results
+        w,h = self._screen.get_size()
+        center = (w//2, h//2)
         result_surface = pygame.Surface((600,400))
         result_surface.fill((16,16,16))
         result_surface.set_alpha(128)
         result_surface_rect = result_surface.get_rect()
-        result_surface_rect.center = CENTER
+        result_surface_rect.center = center
         self._screen.blit(result_surface, result_surface_rect)
 
         # Winner
@@ -150,7 +148,7 @@ class Game:
         win2_text = font.render("Play 2 is the winner",True,(255,255,255))
         draw_text = font.render("Nobody is the winner",True,(255,255,255))
         win_text_rect = win1_text.get_rect()
-        win_text_rect.center = tuple(map(lambda x,y:x-y, CENTER,(0,80)))
+        win_text_rect.center = tuple(map(lambda x,y:x-y, center,(0,80)))
         alive = self.alive()
         if alive[0]:
              self._screen.blit(win1_text, win_text_rect)
@@ -162,15 +160,15 @@ class Game:
         # Score
         score_text = font.render("SCORE",True,(255,255,255))
         score_text_rect = score_text.get_rect()
-        score_text_rect.center = tuple(map(lambda x,y:x-y, CENTER,(0,40)))
+        score_text_rect.center = tuple(map(lambda x,y:x-y, center,(0,40)))
         self._screen.blit(score_text, score_text_rect)
 
         result1_text = font.render("Player 1     "+ str(score1),True,(255,255,255))
         result1_text_rect = result1_text.get_rect()
-        result1_text_rect.center = tuple(map(lambda x,y:x-y, CENTER,(0,0)))
+        result1_text_rect.center = tuple(map(lambda x,y:x-y, center,(0,0)))
         result2_text = font.render("Player 2     "+ str(score2),True,(255,255,255))
         result2_text_rect = result2_text.get_rect()
-        result2_text_rect.center = tuple(map(lambda x,y:x-y, CENTER,(0,-40)))
+        result2_text_rect.center = tuple(map(lambda x,y:x-y, center,(0,-40)))
         self._screen.blit(result1_text, result1_text_rect)
         self._screen.blit(result2_text, result2_text_rect)
 

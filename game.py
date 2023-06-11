@@ -44,7 +44,15 @@ class Game:
         self._battle_time = 0
         self._battle_bgm_channel = pygame.mixer.find_channel()
 
-        
+    def reset(self):
+        self._players = []  # list of players(BlockMechanism)
+        self._builders = [ControllableMechansimBuilder(), ControllableMechansimBuilder()] # list of ControllableMechansimBuilder
+        self._builder_index = 0
+        self._objects = []   # list of objects(like bullet)
+        self._phase = "build"
+        self._origin_hp = []
+        self._battle_time = 0
+
     def alive(self)->tuple:
         alive1 = self.get_player(0)._core._visible
         alive2 = self.get_player(1)._core._visible
@@ -154,6 +162,10 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                     self._running = False
+            elif event.type == pygame.KEYDOWN:
+                 if event.key == pygame.K_RETURN:
+                      self.reset()
+                      return
         
         # Calculate score
         hp1 = self.get_player(0).total_hp()

@@ -40,6 +40,8 @@ class Game:
         self._origin_hp = []
         self._thruster_particle_effect = ThrusterParticlesEffect()
         self._player_thruster_particle_effect = {}
+        self._battle_time = 0
+        self._battle_bgm_channel = pygame.mixer.find_channel()
 
         
     def alive(self)->tuple:
@@ -81,6 +83,11 @@ class Game:
                 self.__build_key_events(key)
 
     def run_battle(self,collision_delay,COLLISION_DELAY_MAX)->None:
+        self._battle_time += 1
+
+        if self._battle_time == 3000:
+            self._battle_bgm_channel.play(Sounds.BATTLE_BGM)
+
         # render stuff
         self._gravity_particle_effect.render(self._screen, self._zero_vector, self._unit_size)
         self.__draw_blocks(self._zero_vector, self._unit_size)
@@ -113,6 +120,9 @@ class Game:
             self.set_phase("end")
 
     def run_end(self)->None:
+        # fade the bgm out
+        self._battle_bgm_channel.fadeout(10000)
+
         # render stuff
         self.__draw_blocks(self._zero_vector, self._unit_size)
 
@@ -170,9 +180,6 @@ class Game:
         COLLISION_DELAY_MAX = 10
 
         clock = pygame.time.Clock()
-        
-        
-        game_time = 0
 
         while self._running:
             # shut down the game
@@ -209,7 +216,6 @@ class Game:
             # Update screen
             pygame.display.flip()
             clock.tick(1/self._time_between_frame) # it doesnt not become super fast idk why
-            game_time += 1
 
         # Quit Pygame
         pygame.quit()

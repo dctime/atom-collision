@@ -13,7 +13,12 @@ class ControllableMechansimBuilder(BlockMechanism):
 
         # Texture of block to add
         self._block_type = "wood"
-        self._coin = 30
+        self._total_coin = 30
+        self._total_cost = 0
+
+    def set_costs(self):
+        costs = [1 if bi._texture=="wood" else 3 if bi._texture=="stone" else 0 for ci,bi in self.get_blocks().items()]
+        self._total_cost = sum(costs)
 
     def set_block_type(self,block_type:str)->None:
         self._block_type = block_type
@@ -35,7 +40,7 @@ class ControllableMechansimBuilder(BlockMechanism):
 
     def add_block_dir(self, direction:str)->None:
         cost = 1 if self._block_type == "wood" else 3 
-        if self._coin<cost:
+        if (self._total_coin-self._total_cost) < cost:
             print("No enough coin.")
             return
 
@@ -49,17 +54,17 @@ class ControllableMechansimBuilder(BlockMechanism):
             coor[0] -= 1
         elif direction=="right":
             coor[0] += 1
-
         coor = tuple(coor)
         block = None
         if self._block_type == "wood":
             block = lb.WoodBlock(coor)
         elif self._block_type =="stone":
             block = lb.StoneBlock(coor)
-        
+
         if block != None:
             self.add_block(block)
-            self._coin -= cost
+            self.set_costs()
+        
 
     def delete_block(self)->None:
         block = self.get_block(self._cursor)
@@ -67,6 +72,7 @@ class ControllableMechansimBuilder(BlockMechanism):
             print("Cannot delete core.")
             return
         self.remove_block(block)
+        self.set_costs()
 
         # Set cursor
         cur = self._cursor

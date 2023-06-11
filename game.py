@@ -52,7 +52,7 @@ class Game:
     def run_build(self)->None:
         # Draw coin GUI
         font = pygame.font.Font(None,32)
-        coin_text = font.render("Coin     "+str(self._builders[self._builder_index]._coin),True,(255,255,255))
+        coin_text = font.render("Coin     "+str((self._builders[self._builder_index]._total_coin-self._builders[self._builder_index]._total_cost)),True,(255,255,255))
         hint_move_cursor_text = font.render("WASD: Move cursor",True,(255,255,255))
         hint_cursor_dot_text = font.render("Red: Wood, Green: Stone",True,(255,255,255))
         hint_add_block_text = font.render("Direction: Add block",True,(255,255,255))

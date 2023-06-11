@@ -26,4 +26,7 @@ class GravityDirector():
     def set_mass(self, mass:float):
         self.__mass = mass
 
+    def get_mass(self):
+        return self.__mass
+
         

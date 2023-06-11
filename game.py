@@ -14,6 +14,11 @@ class Actions():
     CORE_MOVE_LEFT = "core_move_left"
     CORE_MOVE_RIGHT = "core_move_right"
 
+class Timing():
+    PLAY_BGM_TIME = 1000
+    START_STRONG_FORCE_TIME = 12000
+    ENDLESS_FORCE_TIME = 20000
+
 class KeyGroups():
     ThrusterKeys = (pygame.K_w, pygame.K_s, pygame.K_a, pygame.K_d, pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT)
 
@@ -88,8 +93,25 @@ class Game:
     def run_battle(self,collision_delay,COLLISION_DELAY_MAX)->None:
         self._battle_time += 1
 
-        if self._battle_time == 3000:
+        if self._battle_time == Timing.PLAY_BGM_TIME:
             self._battle_bgm_channel.play(Sounds.BATTLE_BGM)
+
+        if self._battle_time == Timing.START_STRONG_FORCE_TIME:
+            self._gravity_particle_effect.set_color(Color.STRONGER_FORCE_FIELD_COLOR)
+            self._gravity_particle_effect.set_width(5)
+            self._gravity_director.set_mass(10**(10.5))
+
+        if self._battle_time > Timing.START_STRONG_FORCE_TIME and self._unit_size > 18:
+            self._unit_size -= 0.01
+
+        if self._battle_time > Timing.ENDLESS_FORCE_TIME:
+            self._gravity_particle_effect.set_color(Color.ENDLESS_FORCE_FIELD_COLOR)
+            self._gravity_particle_effect.set_width(5)
+            self._gravity_director.set_mass(self._gravity_director.get_mass()+10**(5))
+            self._unit_size -= 0.0001
+            
+
+                
 
         # render stuff
         self._gravity_particle_effect.render(self._screen, self._zero_vector, self._unit_size)
@@ -239,10 +261,10 @@ class Game:
         player1=self._builders[0].build()
         player2=self._builders[1].build()
         self.add_players(player1,player2)
-        player1.move_to((-5,0))
-        player2.move_to((5,0))
-        player1.add_force((100, 100), (0, 300), 1)
-        player2.add_force((-100, -100), (0, -300), 1)
+        player1.move_to((-5, -3))
+        player2.move_to((5, 3))
+        player1.add_force((100, 0), (0, 100), 10)
+        player2.add_force((-100, 0), (0, -100), 10)
         self._origin_hp.extend([player1.total_hp(),player2.total_hp()])
         self.set_phase("battle")
 

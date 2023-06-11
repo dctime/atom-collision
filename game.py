@@ -207,6 +207,8 @@ class Game:
         self.add_players(player1,player2)
         player1.move_to((-5,0))
         player2.move_to((5,0))
+        player1.add_force((100, 100), (0, 300), 1)
+        player2.add_force((-100, -100), (0, -300), 1)
         self._origin_hp.extend([player1.total_hp(),player2.total_hp()])
         self.set_phase("battle")
 
@@ -239,19 +241,19 @@ class Game:
         # Apply action on the player
         if action == Actions.CORE_MOVE_UP:
             player.core_move_up(self._time_between_frame)
-            self._player_thruster_particle_effect[player].emit(player.get_coor(), (0, 0.03), 0.02, 0.1, 10, 100)
+            self._player_thruster_particle_effect[player].emit(player.get_coor(), (0, 0.03), 0.02, 0.1, 5, 100)
 
         elif action == Actions.CORE_MOVE_DOWN:
             player.core_move_down(self._time_between_frame)
-            self._player_thruster_particle_effect[player].emit(player.get_coor(), (0, -0.03), 0.02, 0.1, 10, 100)
+            self._player_thruster_particle_effect[player].emit(player.get_coor(), (0, -0.03), 0.02, 0.1, 5, 100)
 
         elif action == Actions.CORE_MOVE_LEFT:
             player.core_move_left(self._time_between_frame)
-            self._player_thruster_particle_effect[player].emit(player.get_coor(), (0.03, 0), 0.02, 0.1, 10, 100)
+            self._player_thruster_particle_effect[player].emit(player.get_coor(), (0.03, 0), 0.02, 0.1, 5, 100)
         
         elif action == Actions.CORE_MOVE_RIGHT:
             player.core_move_right(self._time_between_frame)
-            self._player_thruster_particle_effect[player].emit(player.get_coor(), (-0.03, 0), 0.02, 0.1, 10, 100)
+            self._player_thruster_particle_effect[player].emit(player.get_coor(), (-0.03, 0), 0.02, 0.1, 5, 100)
 
     def __draw_blocks(self, zero_vector:tuple, unit_size:int) -> None:
         # Draw background, players and objects(follow the order)

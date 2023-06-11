@@ -49,24 +49,31 @@ class Game:
         # Draw coin GUI
         font = pygame.font.Font(None,32)
         coin_text = font.render("Coin     "+str((self._builders[self._builder_index]._total_coin-self._builders[self._builder_index]._total_cost)),True,(255,255,255))
+        cost_text = font.render("Cost     "+str(1 if self._builders[self._builder_index]._block_type == "wood" else 3),True,(255,255,255))
         hint_move_cursor_text = font.render("WASD: Move cursor",True,(255,255,255))
         hint_cursor_dot_text = font.render("Red: Wood, Green: Stone",True,(255,255,255))
         hint_add_block_text = font.render("Direction: Add block",True,(255,255,255))
+        hint_confirm_text = font.render("Press Enter to confirm",True,(255,255,255))
 
         coin_text_rect = coin_text.get_rect()
         coin_text_rect.topleft = (0,0)
+        cost_text_rect = cost_text.get_rect()
+        cost_text_rect.topleft = (0,40)
         hint_move_cursor_text_rect = hint_move_cursor_text.get_rect()
-        hint_move_cursor_text_rect.topleft = (0, 40)
+        hint_move_cursor_text_rect.topleft = (0, 80)
         hint_cursor_dot_text_rect = hint_cursor_dot_text.get_rect()
-        hint_cursor_dot_text_rect.topleft = (0,80)
+        hint_cursor_dot_text_rect.topleft = (0,120)
         hint_add_block_text_rect = hint_add_block_text.get_rect()
-        hint_add_block_text_rect.topleft = (0,120)
+        hint_add_block_text_rect.topleft = (0,160)
+        hint_confirm_text_rect = hint_confirm_text.get_rect()
+        hint_confirm_text_rect.topleft = (0,200)
 
         self._screen.blit(coin_text, coin_text_rect)
+        self._screen.blit(cost_text, cost_text_rect)
         self._screen.blit(hint_move_cursor_text, hint_move_cursor_text_rect)
         self._screen.blit(hint_cursor_dot_text, hint_cursor_dot_text_rect)
         self._screen.blit(hint_add_block_text, hint_add_block_text_rect)
-
+        self._screen.blit(hint_confirm_text, hint_confirm_text_rect)
 
         # render stuff
         self.__draw_blocks(self._zero_vector, self._unit_size)

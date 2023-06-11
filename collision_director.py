@@ -1,5 +1,4 @@
 from block_mechanism import BlockMechanism
-from leaf_blocks import CoreBlock
 from block import Block
 import numpy as np
 np.seterr(divide='ignore', invalid='ignore')

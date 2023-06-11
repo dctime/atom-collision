@@ -1,5 +1,4 @@
 from game_state import GameState
-from agent import Agent
 
 
 class minimaxAgent():

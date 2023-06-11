@@ -1,5 +1,4 @@
 from block_mechanism import BlockMechanism
-import numpy as np
 G = 6.674*(10**(-11))
 class GravityDirector():
     def __init__(self, mass:float, loc:tuple, time_between_frame:float):

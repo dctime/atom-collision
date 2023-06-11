@@ -1,5 +1,4 @@
 from defense_block import DefenseBlock
-from block import Block
 from color import Color
 
 

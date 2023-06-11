@@ -1,6 +1,5 @@
 from leaf_blocks import CoreBlock
 import leaf_blocks as lb
-import math
 from defense_block import DefenseBlock
 
 

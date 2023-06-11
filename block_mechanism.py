@@ -1,9 +1,6 @@
 from block_assembly import BlockAssembly
 from leaf_blocks import CoreBlock
-import pygame
-import math
 import numpy as np
-from scipy.stats import norm
 
 MAX_OMEGA = 1
 

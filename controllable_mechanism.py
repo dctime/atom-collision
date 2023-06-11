@@ -1,7 +1,5 @@
 from block_mechanism import BlockMechanism
 from leaf_blocks import CoreBlock
-import pygame
-from sound import Sounds
 
 CORE_FORCE = 5000
 class ControllableMechansim(BlockMechanism):

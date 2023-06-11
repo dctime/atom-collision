@@ -13,6 +13,7 @@ class ControllableMechansimBuilder(BlockMechanism):
 
         # Texture of block to add
         self._block_type = "wood"
+        self._coin = 30
 
     def set_block_type(self,block_type:str)->None:
         self._block_type = block_type
@@ -33,6 +34,11 @@ class ControllableMechansimBuilder(BlockMechanism):
             self._cursor=pos
 
     def add_block_dir(self, direction:str)->None:
+        cost = 1 if self._block_type == "wood" else 3 
+        if self._coin<cost:
+            print("No enough coin.")
+            return
+
         # Set coor
         coor = list(self._cursor)
         if direction=="up":
@@ -53,6 +59,7 @@ class ControllableMechansimBuilder(BlockMechanism):
         
         if block != None:
             self.add_block(block)
+            self._coin -= cost
 
     def delete_block(self)->None:
         block = self.get_block(self._cursor)

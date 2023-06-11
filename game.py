@@ -48,6 +48,28 @@ class Game:
         return (alive1,alive2)
     
     def run_build(self)->None:
+        # Draw coin GUI
+        font = pygame.font.Font(None,32)
+        coin_text = font.render("Coin     "+str(self._builders[self._builder_index]._coin),True,(255,255,255))
+        hint_move_cursor_text = font.render("WASD: Move cursor",True,(255,255,255))
+        hint_cursor_dot_text = font.render("Red: Wood, Green: Stone",True,(255,255,255))
+        hint_add_block_text = font.render("Direction: Add block",True,(255,255,255))
+
+        coin_text_rect = coin_text.get_rect()
+        coin_text_rect.topleft = (0,0)
+        hint_move_cursor_text_rect = hint_move_cursor_text.get_rect()
+        hint_move_cursor_text_rect.topleft = (0, 40)
+        hint_cursor_dot_text_rect = hint_cursor_dot_text.get_rect()
+        hint_cursor_dot_text_rect.topleft = (0,80)
+        hint_add_block_text_rect = hint_add_block_text.get_rect()
+        hint_add_block_text_rect.topleft = (0,120)
+
+        self._screen.blit(coin_text, coin_text_rect)
+        self._screen.blit(hint_move_cursor_text, hint_move_cursor_text_rect)
+        self._screen.blit(hint_cursor_dot_text, hint_cursor_dot_text_rect)
+        self._screen.blit(hint_add_block_text, hint_add_block_text_rect)
+
+
         # render stuff
         self.__draw_blocks(self._zero_vector, self._unit_size)
 
@@ -127,6 +149,7 @@ class Game:
         else:
              self._screen.blit(draw_text, win_text_rect)
 
+        # Score
         score_text = font.render("SCORE",True,(255,255,255))
         score_text_rect = score_text.get_rect()
         score_text_rect.center = tuple(map(lambda x,y:x-y, CENTER,(0,40)))

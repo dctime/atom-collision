@@ -104,7 +104,7 @@ class Game:
         if self._battle_time > Timing.START_STRONG_FORCE_TIME and self._unit_size > 18:
             self._unit_size -= 0.01
 
-        if self._battle_time > Timing.ENDLESS_FORCE_TIME:
+        if self._battle_time > Timing.ENDLESS_FORCE_TIME and self._unit_size > 0.001:
             self._gravity_particle_effect.set_color(Color.ENDLESS_FORCE_FIELD_COLOR)
             self._gravity_particle_effect.set_width(5)
             self._gravity_director.set_mass(self._gravity_director.get_mass()+10**(8))

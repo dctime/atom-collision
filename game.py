@@ -79,6 +79,7 @@ class Game:
         self._origin_hp = []
         self._battle_time = 0
         self._unit_size = self._origin_unit_size
+        self._tracks = [[], []]
 
     def draw_tracks(self):
         for i in range(2):

@@ -80,6 +80,10 @@ class Game:
         self._battle_time = 0
         self._unit_size = self._origin_unit_size
         self._tracks = [[], []]
+        self._gravity_director = GravityDirector(
+            10**(10), (0, 0), self._time_between_frame)
+        self._gravity_particle_effect = GravityParticleEffect(
+            max(self._screen.get_size()[0], self._screen.get_size()[1]), (0, 0), 3)
 
     def draw_tracks(self):
         for i in range(2):

@@ -44,6 +44,7 @@ class Game:
         self._time_between_frame = time_between_frame
         self._zero_vector = zero_vector
         self._unit_size = unit_size
+        self._origin_unit_size = unit_size
         self._running = True
         self._gravity_particle_effect = GravityParticleEffect(
             max(pygame_screen.get_size()[0], pygame_screen.get_size()[1]), (0, 0), 3)
@@ -52,9 +53,12 @@ class Game:
         self._player_thruster_particle_effect = {}
         self._battle_time = 0
         self._battle_bgm_channel = pygame.mixer.find_channel()
-        self._track_length = 30
         self._tracks = [[], []]
+
+        # Hard code
+        self._track_length = 30
         self._track_colors = ((255, 0, 0), (0, 0, 255))
+        self._track_ratio = 1/8
 
     def add_tracks(self):
         for i in range(2):
@@ -74,6 +78,7 @@ class Game:
         self._phase = "build"
         self._origin_hp = []
         self._battle_time = 0
+        self._unit_size = self._origin_unit_size
 
     def draw_tracks(self):
         for i in range(2):
@@ -84,7 +89,7 @@ class Game:
                 pos = change_normalized_into_real(
                     self._zero_vector, self._unit_size, ti)
                 pygame.draw.circle(
-                    self._screen, color, pos, 4)
+                    self._screen, color, pos, self._unit_size*self._track_ratio)
                 color = [ci-di for ci, di in zip(color, delta_color)]
 
     def alive(self) -> tuple:

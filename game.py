@@ -52,7 +52,7 @@ class Game:
         self._thruster_particle_effect = ThrusterParticlesEffect()
         self._player_thruster_particle_effect = {}
         self._battle_time = 0
-        self._battle_bgm_channel = pygame.mixer.find_channel()
+        # self._battle_bgm_channel = pygame.mixer.find_channel()
         self._tracks = [[], []]
 
         # Hard code
@@ -152,8 +152,8 @@ class Game:
         self._battle_time += 1
         self.add_tracks()
 
-        if self._battle_time == Timing.PLAY_BGM_TIME:
-            self._battle_bgm_channel.play(Sounds.BATTLE_BGM)
+        # if self._battle_time == Timing.PLAY_BGM_TIME:
+        #     self._battle_bgm_channel.play(Sounds.BATTLE_BGM)
 
         if self._battle_time == Timing.START_STRONG_FORCE_TIME:
             self._gravity_particle_effect.set_color(
@@ -208,7 +208,7 @@ class Game:
 
     def run_end(self) -> None:
         # fade the bgm out
-        self._battle_bgm_channel.fadeout(10000)
+        # self._battle_bgm_channel.fadeout(10000)
 
         # render stuff
         self.__draw_blocks(self._zero_vector, self._unit_size)
@@ -447,10 +447,10 @@ class Game:
             if event.type == pygame.QUIT:
                 self._running = False
 
-            if event.type == pygame.KEYDOWN:
-                for key in KeyGroups.ThrusterKeys:
-                    if event.key == key:
-                        Sounds.THRUSTER_BURN.play()
+            # if event.type == pygame.KEYDOWN:
+            #     for key in KeyGroups.ThrusterKeys:
+            #         if event.key == key:
+            #             Sounds.THRUSTER_BURN.play()
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w]:
@@ -481,10 +481,10 @@ class Game:
         '''
         called when collision happnens
         '''
-        if random.randint(0, 1):
-            Sounds.BUMP1.play()
-        else:
-            Sounds.BUMP2.play()
+        # if random.randint(0, 1):
+        #     Sounds.BUMP1.play()
+        # else:
+        #     Sounds.BUMP2.play()
 
 
 def change_normalized_into_real(zero_vector: tuple, unit_size: int, target_vector: tuple): return (

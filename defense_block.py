@@ -49,23 +49,36 @@ class DefenseBlock(Block):
 
     def set_color(self):
         status = self._status
-        match status:
-            case 0:
-                self._color = tuple(
-                    map(lambda x, y: x+y, self._init_color, (100, 0, 0)))
-            case 1:
-                self._color = tuple(
-                    map(lambda x, y: x+y, self._init_color, (75, 0, 0)))
-            case 2:
-                self._color = tuple(
-                    map(lambda x, y: x+y, self._init_color, (50, 0, 0)))
-            case 3:
-                self._color = tuple(
-                    map(lambda x, y: x+y, self._init_color, (25, 0, 0)))
-            case 4:
-                self._color = self._init_color
-            case _:
-                raise Exception('In set_color: Value of status out of range')
+        # match status:
+        if status == 0:
+            self._color = tuple(map(lambda x, y: x+y, self._init_color, (100, 0, 0)))
+        elif status == 1:
+            self._color = tuple(map(lambda x, y: x+y, self._init_color, (75, 0, 0)))
+        elif status == 2:
+            self._color = tuple(map(lambda x, y: x+y, self._init_color, (50, 0, 0)))
+        elif status == 3:
+            self._color = tuple(map(lambda x, y: x+y, self._init_color, (25, 0, 0)))
+        elif status == 4:
+            self._color = self._init_color
+        else:
+            raise Exception('In set_color: Value of status out of range')
+        # match status:
+        #     case 0:
+        #         self._color = tuple(
+        #             map(lambda x, y: x+y, self._init_color, (100, 0, 0)))
+        #     case 1:
+        #         self._color = tuple(
+        #             map(lambda x, y: x+y, self._init_color, (75, 0, 0)))
+        #     case 2:
+        #         self._color = tuple(
+        #             map(lambda x, y: x+y, self._init_color, (50, 0, 0)))
+        #     case 3:
+        #         self._color = tuple(
+        #             map(lambda x, y: x+y, self._init_color, (25, 0, 0)))
+        #     case 4:
+        #         self._color = self._init_color
+        #     case _:
+        #         raise Exception('In set_color: Value of status out of range')
             
         self._color = tuple([min(ci,255) for ci in self._color])
 
